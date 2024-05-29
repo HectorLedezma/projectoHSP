@@ -27,65 +27,70 @@ function Screen(){
             </div>
             
             <div className="d-flex justify-content-around">{/* Pacientes, especialistas, llamados y información */}
-                <div className="col-8">{/* Box X especialista X pacientes y Información*/}
+                <div className="col-9">{/* Box X especialista X pacientes y Información*/}
                     
-                    <Row>
-                        <Table bordered>
-                            <thead>
-                                <tr className="border border-dark border-3">
-                                    <th style={tables.TbepHeader}>Box</th>
-                                    <th style={tables.TbepHeader}>Especialista</th>
-                                    <th style={tables.TbepHeader} colSpan={5}>Pacientes en espera</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <Table bordered>
+                        <thead>
+                            <tr>
+                                <th style={tables.TbepHeader}>Box</th>
+                                <th style={tables.TbepHeader}>Especialista</th>
+                                <th style={tables.TbepHeader} colSpan={5}>Pacientes en espera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {[
+                            <tr>
+                                <td style={tables.TbepBoxEsp}>24</td>
+                                <td style={tables.TbepBoxEsp}>Dr. Nickolas R.</td>
                                 {[
-                                <tr>
-                                    <td style={tables.TbepBoxEsp}>24</td>
-                                    <td style={tables.TbepBoxEsp}>Dr. Nickolas R.</td>
-                                    {[
-                                        <td style={tables.Atendido}>Maximiliano P.</td>,
-                                        <td style={tables.Espera}>Maximiliano R.</td>,
-                                        <td style={tables.Espera}>Maximiliano P.</td>,
-                                        <td style={tables.Espera}>Maximiliano R.</td>,
-                                        <td style={tables.Espera}>Maximiliano R.</td>
-                                    ]}
-                                </tr>,
-                                <tr>
-                                    <td style={tables.TbepBoxEsp}>23</td>
-                                    <td style={tables.TbepBoxEsp}>Dra. Katherin H.</td>
-                                    {[
-                                        <td style={tables.Llamando}>Johon S.</td>,
-                                        <td style={tables.Espera}>Jorge N.</td>
-                                    ]}
-                                </tr>
+                                    <td style={tables.Atendido}>Maximiliano P.</td>,
+                                    <td style={tables.Espera}>Maximiliano R.</td>,
+                                    <td style={tables.Espera}>Maximiliano P.</td>,
+                                    <td style={tables.Espera}>Maximiliano R.</td>,
+                                    <td style={tables.Espera}>Maximiliano R.</td>
                                 ]}
-                            </tbody>
-                        </Table>
-                    </Row>
+                            </tr>,
+                            <tr>
+                                <td style={tables.TbepBoxEsp}>23</td>
+                                <td style={tables.TbepBoxEsp}>Dra. Katherin H.</td>
+                                {[
+                                    <td style={tables.Espera}>Johon S.</td>,
+                                    <td style={tables.Espera}>Jorge N.</td>
+                                ]}
+                            </tr>
+                            ]}
+                        </tbody>
+                    </Table>
+                    <div className="">
+                        <Row className="mb-3">
+                            <Col className="d-flex align-items-center justify-content-center"><div className="m-3 border border-dark" style={tables.Info_box_espe}/> Paciente en espera</Col>
+                            <Col className="d-flex align-items-center justify-content-center"><div className="m-3 border border-dark" style={tables.Info_box_aten}/> Paciente en atención</Col>
+                        </Row>
+                        <Row>
+                            <Col className="bg-warning fw-bold fs-4">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</Col>
+                        </Row>
+                    </div>
                 </div>
                 
                 <div className="col-3">{/* Paciente X llamado */}
                     
-                    <Row className="d-flex align-items-center justify-content-center">
-                        <Table bordered>
-                            <thead>
+                    <Table bordered>
+                        <thead>
+                            <tr>
+                                <th colSpan={2}>
+                                    Últimos llamados
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {[
                                 <tr>
-                                    <th colSpan={2}>
-                                        Últimos llamados
-                                    </th>
+                                    <td>Pedro P.</td>
+                                    <td>Box 1</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {[
-                                    <tr>
-                                        <td>Pedro P.</td>
-                                        <td>Box 1</td>
-                                    </tr>
-                                ]}
-                            </tbody>
-                        </Table>
-                    </Row>
+                            ]}
+                        </tbody>
+                    </Table>
                 </div>
             </div>
 
