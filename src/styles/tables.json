@@ -9,7 +9,8 @@
 
     "TbepBoxEsp":{
         "backgroundColor":"rgb(0, 0, 255)",
-        "color":"rgb(255, 255, 255)"
+        "color":"rgb(255, 255, 255)",
+        "font-weight":"bold"
     },
 
     "Atendido":{
@@ -23,6 +24,17 @@
 
     "Tllamado":{
         "backgroundColor":"rgb(10, 148, 0)"
+    },
+
+    "Info_box_aten":{
+        "width":"4vw",
+        "height":"4vh",
+        "backgroundColor":"rgb(4, 255, 0)"
+    },
+    "Info_box_espe":{
+        "width":"4vw",
+        "height":"4vh",
+        "backgroundColor":"rgb(118, 198, 255)"
     }
 
 }
