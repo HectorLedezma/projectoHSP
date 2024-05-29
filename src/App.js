@@ -1,12 +1,15 @@
-import logo from './logo.svg';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import Screen from './screen';
+import Rutas from './routes';
+//import Screen from './screen';
 
 function App() {
   return (
-    <div className="App">
-      <Screen/>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Rutas/>
+      </div>
+    </BrowserRouter>
   );
 }
 
