@@ -4,8 +4,17 @@ export class Reloj{
     date = new Date();
 
     getHora(){
-        const hora = this.date.getHours();
-        const minu = this.date.getMinutes();
+        const unidad = (num) =>{
+            let n = "";
+            if(num<10){
+                n = "0"+num;
+            }else{
+                n = ""+num;
+            }
+            return n;
+        };
+        const hora = unidad(this.date.getHours());
+        const minu = unidad(this.date.getMinutes());
         return{hora:hora,minu:minu};
     }
 
