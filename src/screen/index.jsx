@@ -4,11 +4,26 @@ import logoHSPC from "../images/hspc.png";
 import logoUCEN from "../images/ucen.png";
 import "../styles/layout.css";
 import tables from "../styles/tables.json";
+import { Reloj } from "../data/classes/relog";
+import { useEffect, useState } from "react";
 
 /* border border-primary */
 
 
 function Screen(){
+    const [calendar,setCalendar] = useState(new Reloj());
+
+    const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
+    const [fecha, setFecha] = useState(calendar.getFecha());
+
+    useEffect(()=>{
+        setInterval(()=>{
+            setCalendar(new Reloj());
+            setHora(calendar.getHora().hora+":"+calendar.getHora().minu);
+            setFecha(calendar.getFecha());
+        },15000)
+    })
+
     return(
         <div>{/* cuadro de la pantalla */}
             
@@ -18,8 +33,8 @@ function Screen(){
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
                             <Row><Col><h1 className="fs-3 fw-bold">{"Sala de espera: Piso "+3}</h1></Col></Row>{/* Nombre de sala de espera */}
-                            <Row><Col><h2 className="fs-5">{"Martes 28 de Mayo de 2024"}</h2></Col></Row>{/* Fecha */}
-                            <Row><Col><h2 className="fs-5">{"11:30"}</h2></Col></Row>{/* Hora */}
+                            <Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha */}
+                            <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
                     </Col>
                     <Col xl={3} md={2}><Image src={logoHSPC}  className="imagen"/></Col>{/* Logo HSPablo */}
