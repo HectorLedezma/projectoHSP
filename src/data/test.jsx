@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import {Datos} from "./datos.js";
+import {Datos} from "../classes/datos.js";
 
 function Test(){
 
