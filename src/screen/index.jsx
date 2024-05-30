@@ -6,11 +6,37 @@ import "../styles/layout.css";
 import tables from "../styles/tables.json";
 import { Reloj } from "../data/classes/relog";
 import { useEffect, useState } from "react";
+import { Datos } from "../data/datos";
 
 /* border border-primary */
 
 
-function Screen(){
+function Screen(props){
+
+    const TablaAzul = (datos) => {
+        let espec = [];
+        for(let i = 0;i<datos.length;i++){
+            if(!espec.includes({"box":datos[i].nameModule,"spec":datos[i].nombre_prof})){
+                espec.push({"box":datos[i].nameModule,"spec":datos[i].nombre_prof})
+            }
+        }
+        let compList = [];
+        for(let j = 0;j<espec.length;j++){
+            compList.push(
+                <tr key={espec[j].box}>
+                    <td style={tables.TbepBoxEsp}>{espec[j].box}</td>
+                    <td style={tables.TbepBoxEsp}>{espec[j].spec}</td>
+                    {}
+                </tr>
+            );
+        }
+        return compList;
+    }
+
+    const [datos,setDatos] = useState(new Datos().consultar(Number(props.dpto)));
+
+    const [blue,setBlue] = useState(TablaAzul(datos));
+
     const [calendar,setCalendar] = useState(new Reloj());
 
     const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
@@ -21,6 +47,8 @@ function Screen(){
             setCalendar(new Reloj());
             setHora(calendar.getHora().hora+":"+calendar.getHora().minu);
             setFecha(calendar.getFecha());
+            setDatos(new Datos().consultar(Number(props.dpto)));
+            setBlue(TablaAzul(datos));
         },15000)
     })
 
@@ -32,7 +60,7 @@ function Screen(){
                     <Col xl={3} md={2}><Image src={logoUCEN} className="imagen"/></Col>{/* Logo UCentral */}
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
-                            <Row><Col><h1 className="fs-3 fw-bold">{"Sala de espera: Piso "+3}</h1></Col></Row>{/* Nombre de sala de espera */}
+                            <Row><Col><h1 className="fs-3 fw-bold">{"Sala de espera departamento "+props.dpto}</h1></Col></Row>{/* Nombre de sala de espera */}
                             <Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha */}
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
@@ -53,27 +81,7 @@ function Screen(){
                             </tr>
                         </thead>
                         <tbody>
-                            {[
-                            <tr>
-                                <td style={tables.TbepBoxEsp}>24</td>
-                                <td style={tables.TbepBoxEsp}>Dr. Nickolas R.</td>
-                                {[
-                                    <td style={tables.Atendido}>Maximiliano P.</td>,
-                                    <td style={tables.Espera}>Maximiliano R.</td>,
-                                    <td style={tables.Espera}>Maximiliano P.</td>,
-                                    <td style={tables.Espera}>Maximiliano R.</td>,
-                                    <td style={tables.Espera}>Maximiliano R.</td>
-                                ]}
-                            </tr>,
-                            <tr>
-                                <td style={tables.TbepBoxEsp}>23</td>
-                                <td style={tables.TbepBoxEsp}>Dra. Katherin H.</td>
-                                {[
-                                    <td style={tables.Espera}>Johon S.</td>,
-                                    <td style={tables.Espera}>Jorge N.</td>
-                                ]}
-                            </tr>
-                            ]}
+                            {blue}
                         </tbody>
                     </Table>
                     <div className="">
@@ -108,7 +116,6 @@ function Screen(){
                     </Table>
                 </div>
             </div>
-
         </div>
     )
 }
