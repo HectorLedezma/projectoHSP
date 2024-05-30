@@ -10,7 +10,7 @@
     "TbepBoxEsp":{
         "backgroundColor":"rgb(0, 0, 255)",
         "color":"rgb(255, 255, 255)",
-        "font-weight":"bold"
+        "fontWeight":"bold"
     },
 
     "Atendido":{
