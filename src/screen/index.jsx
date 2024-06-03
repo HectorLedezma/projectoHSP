@@ -7,30 +7,82 @@ import tables from "../styles/tables.json";
 import { Reloj } from "../classes/relog";
 import { useEffect, useState } from "react";
 import { Datos } from "../classes/datos";
+import { ETL } from "../classes/etl";
 
 /* border border-primary */
 
 
 function Screen(props){
 
-    const TablaAzul = (datos) => {
+
+    const TablaVerde = (x) =>{
+        let res = []
+        for(let i = 0; i<x;i++){
+            res.push(
+                <tr>
+                    <td style={tables.Atendido}>Pedro P.</td>
+                    <td style={tables.Atendido}>Box {i}</td>
+                </tr>
+            )
+        }
+        return res
+    }
+
+    const TablaAzul = (datos) => {//funcion que extrae datos del JSON y los pasa a la tabla BOX/Especialista/Paciente
         let espec = [];
-        let nombres = []
-        for(let i = 0;i<datos.length;i++){
+        let nombres = [];
+        let pacientes = [];
+        const etl = new ETL();
+        for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             let dato = {"box":datos[i].nameModule,"spec":datos[i].nombre_prof};
-            let nombre = datos[i].nombre_prof;
-            if(!nombres.includes(nombre)){
+            let nombre = dato.spec;
+            
+            if(!nombres.includes(nombre)){//si el especialista aun no es agregado a la lista
+                if(datos[i].estado !== 4 && datos[i].estado !== 13){//comprueba que el paciente no se encuetre atendido aun
+                    pacientes.push({nombreD:nombre,nombreP:[etl.recortaNombreP(datos[i].nombre_paciente)], estado: [datos[i].estado]})
+                }
                 espec.push(dato);
                 nombres.push(nombre);
+            }else{//si el nombre del especialista ya esta en la lista
+                for(let j = 0; j<pacientes.length;j++){//recorre la lista de pacientes
+                    if(datos[i].nombre_prof === pacientes[j].nombreD){
+                        if(datos[i].estado !== 4 && datos[i].estado !== 13){//comprueba que el paciente no se encuetre atendido aun
+                            //añade el nombre del paciente a la lista asociada al doctor con su estado de atencion
+                            pacientes[j].nombreP.push(etl.recortaNombreP(datos[i].nombre_paciente));
+                            pacientes[j].estado.push(datos[i].estado);
+                        }
+                    }
+                }
             }
         }
+
+        const getPacientes = (dr) => {
+            let res = [];
+
+            const EnEspera = [1,2,5,8,9,10,11];
+            
+            for(let j = 0; j<pacientes.length;j++){
+                
+                if(pacientes[j].nombreD === dr){
+                    const lim = pacientes[j].estado.length < 5? pacientes[j].estado.length : 5;
+                    for(let x = 0; x < lim; x++){
+                        let DefEstado = EnEspera.includes(pacientes[j].estado[x])? "Espera":"Atendido";
+                        //console.log(tables[DefEstado]);
+                        res.push(<td style={tables[DefEstado]} >{pacientes[j].nombreP[x]}</td>);
+                    }
+                    break;
+                }
+            }
+            return res;
+        }
+
         let compList = [];
         for(let j = 0;j<espec.length;j++){
             compList.push(
                 <tr key={j}>
                     <td style={tables.TbepBoxEsp}>{espec[j].box}</td>
-                    <td style={tables.TbepBoxEsp}>{espec[j].spec}</td>
-                    {}
+                    <td style={tables.TbepBoxEsp}>{etl.recortaNombre(espec[j].spec)}</td>
+                    {getPacientes(espec[j].spec)}
                 </tr>
             );
         }
@@ -41,7 +93,7 @@ function Screen(props){
 
     const [blue,setBlue] = useState(TablaAzul(datos));
 
-    let calendar = new Reloj();
+    const calendar = new Reloj();
     const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     const [fecha, setFecha] = useState(calendar.getFecha());
 
@@ -101,16 +153,13 @@ function Screen(props){
                     <Table bordered>
                         <thead>
                             <tr>
-                                <th colSpan={2}>
+                                <th className="under-header position-sticky z-4 border border-3 border-white" style={tables.Atendido} colSpan={2}>
                                     Últimos llamados
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Pedro P.</td>
-                                <td>Box 1</td>
-                            </tr>
+                            {TablaVerde(20)}
                         </tbody>
                     </Table>
                 </div>
