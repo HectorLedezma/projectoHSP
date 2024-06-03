@@ -15,11 +15,13 @@ function Screen(props){
 
     const TablaAzul = (datos) => {
         let espec = [];
+        let nombres = []
         for(let i = 0;i<datos.length;i++){
             let dato = {"box":datos[i].nameModule,"spec":datos[i].nombre_prof};
-            
-            if(!espec.includes(dato)){
+            let nombre = datos[i].nombre_prof;
+            if(!nombres.includes(nombre)){
                 espec.push(dato);
+                nombres.push(nombre);
             }
         }
         let compList = [];
@@ -45,7 +47,8 @@ function Screen(props){
 
     useEffect(()=>{
         setInterval(()=>{
-            setHora(calendar.getHora().hora+":"+calendar.getHora().minu);
+            let hrs = calendar.getHora();
+            setHora(hrs.hora+":"+hrs.minu);
             setFecha(calendar.getFecha());
             setDatos(new Datos().consultar(Number(props.dpto)));
             setBlue(TablaAzul(datos));
