@@ -3,9 +3,7 @@
         "backgroundColor":"rgb(0, 0, 255)",
         "color":"rgb(255, 255, 255)"
     },
-    "Espera":{
-        "backgroundColor":"rgb(118, 198, 255)"
-    },
+    
 
     "TbepBoxEsp":{
         "backgroundColor":"rgb(0, 0, 255)",
@@ -13,13 +11,9 @@
         "fontWeight":"bold"
     },
 
-    "Atendido":{
-        "backgroundColor":"rgb(4, 255, 0)"
-    },
+    
 
-    "Llamando":{
-        "backgroundColor":"rgb(255, 255, 0)"
-    },
+    
 
 
     "Tllamado":{
@@ -29,12 +23,27 @@
     "Info_box_aten":{
         "width":"4vw",
         "height":"4vh",
-        "backgroundColor":"rgb(4, 255, 0)"
+        "backgroundColor":"#00C1CD"
+    },"Info_box_call":{
+        "width":"4vw",
+        "height":"4vh",
+        "backgroundColor":"#049100"
     },
     "Info_box_espe":{
         "width":"4vw",
         "height":"4vh",
-        "backgroundColor":"rgb(118, 198, 255)"
+        "backgroundColor":"#FFB900"
+    },
+    "_com1":"estados",
+    "Espera":{
+        "backgroundColor":"#FFB900"
+    },
+    "Llamando":{
+        "backgroundColor":"#049100"
+    },
+    "Atendiendo":{
+        "backgroundColor":"#00C1CD"
     }
+    
 
 }

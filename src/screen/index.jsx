@@ -20,8 +20,8 @@ function Screen(props){
         for(let i = 0; i<x;i++){
             res.push(
                 <tr>
-                    <td style={tables.Atendido}>Pedro P.</td>
-                    <td style={tables.Atendido}>Box {i}</td>
+                    <td className="fs-4 p-0" style={tables.Atendiendo}>Pedro P.</td>
+                    <td className="fs-4 p-0" style={tables.Atendiendo}>Box {i}</td>
                 </tr>
             )
         }
@@ -59,15 +59,16 @@ function Screen(props){
         const getPacientes = (dr) => {
             let res = [];
 
-            const EnEspera = [1,2,5,8,9,10,11];
+            const EnEspera = [1,5,6,7,9,10,11];
+            
             /**
             
                 estados:
-                1 y default: en espera
-                2: llamando
-                3 y 12: en atención
-                4 y 13: fin
-                8: no llegó
+                1 y default: en espera (Amarillo)
+                2: llamando (Verde)
+                3 y 12: en atención (Celeste)
+                4 y 13: fin (Omitir)
+                8: no llegó (Omitir)
 
 
              */
@@ -76,9 +77,9 @@ function Screen(props){
                 if(pacientes[j].nombreD === dr){
                     const lim = pacientes[j].estado.length < 5? pacientes[j].estado.length : 5;
                     for(let x = 0; x < lim; x++){
-                        let DefEstado = EnEspera.includes(pacientes[j].estado[x])? "Espera":"Atendido";
+                        let DefEstado = EnEspera.includes(pacientes[j].estado[x])? "Espera":"Atendiendo";
                         //console.log(tables[DefEstado]);
-                        res.push(<td className="fs-4" style={tables[DefEstado]} >{pacientes[j].nombreP[x]}</td>);
+                        res.push(<td className="fs-4 p-0" style={tables[DefEstado]} >{pacientes[j].nombreP[x]}</td>);
                     }
                     break;
                 }
@@ -90,8 +91,8 @@ function Screen(props){
         for(let j = 0;j<espec.length;j++){
             compList.push(
                 <tr key={j}>
-                    <td className="fs-4" style={tables.TbepBoxEsp}>{espec[j].box}</td>
-                    <td className="fs-4" style={tables.TbepBoxEsp}>{etl.recortaNombre(espec[j].spec)}</td>
+                    <td className="fs-4 p-0" style={tables.TbepBoxEsp}>{espec[j].box}</td>
+                    <td className="fs-4 p-0" style={tables.TbepBoxEsp}>{etl.recortaNombre(espec[j].spec)}</td>
                     {getPacientes(espec[j].spec)}
                 </tr>
             );
@@ -125,7 +126,7 @@ function Screen(props){
                     <Col xl={3} md={2}><Image src={logoUCEN} className="imagen"/></Col>{/* Logo UCentral */}
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
-                            <Row><Col><h1 className="fs-3 fw-bold">{"Sala de espera departamento "+props.dpto}</h1></Col></Row>{/* Nombre de sala de espera */}
+                            <Row><Col><h1 className="fs-2 fw-bold">{"Sala de espera departamento "+props.dpto}</h1></Col></Row>{/* Nombre de sala de espera */}
                             {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
@@ -151,8 +152,9 @@ function Screen(props){
                     </Table>
                     <div className="fixed-bottom bg-light col-9">
                         <Row className="mb-3">
-                            <Col className="d-flex align-items-center justify-content-center"><div className="m-3 border border-dark" style={tables.Info_box_espe}/> Paciente en espera</Col>
-                            <Col className="d-flex align-items-center justify-content-center"><div className="m-3 border border-dark" style={tables.Info_box_aten}/> Paciente en atención</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-3 border border-dark " style={tables.Info_box_espe}/> Paciente en espera</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-3 border border-dark" style={tables.Info_box_call}/> Paciente siendo llamado</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-3 border border-dark" style={tables.Info_box_aten}/> Paciente en atención</Col>
                         </Row>
                         <div className="bg-warning fw-bold fs-4">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</div>
                     </div>
@@ -163,7 +165,7 @@ function Screen(props){
                     <Table bordered>
                         <thead>
                             <tr>
-                                <th className="under-header position-sticky z-4 border border-3 border-white" style={tables.Atendido} colSpan={2}>
+                                <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Atendiendo} colSpan={2}>
                                     Últimos llamados
                                 </th>
                             </tr>
