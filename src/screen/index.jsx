@@ -4,7 +4,7 @@ import logoHSPC from "../images/hspc.png";
 import logoUCEN from "../images/ucen.png";
 import "../styles/layout.css";
 import tables from "../styles/tables.json";
-import { Reloj } from "../classes/relog";
+//import { Reloj } from "../classes/relog";
 import { useEffect, useState } from "react";
 import { Datos } from "../classes/datos";
 import { ETL } from "../classes/etl";
@@ -60,7 +60,17 @@ function Screen(props){
             let res = [];
 
             const EnEspera = [1,2,5,8,9,10,11];
+            /**
             
+                estados:
+                1 y default: en espera
+                2: llamando
+                3 y 12: en atención
+                4 y 13: fin
+                8: no llegó
+
+
+             */
             for(let j = 0; j<pacientes.length;j++){
                 
                 if(pacientes[j].nombreD === dr){
@@ -68,7 +78,7 @@ function Screen(props){
                     for(let x = 0; x < lim; x++){
                         let DefEstado = EnEspera.includes(pacientes[j].estado[x])? "Espera":"Atendido";
                         //console.log(tables[DefEstado]);
-                        res.push(<td style={tables[DefEstado]} >{pacientes[j].nombreP[x]}</td>);
+                        res.push(<td className="fs-4" style={tables[DefEstado]} >{pacientes[j].nombreP[x]}</td>);
                     }
                     break;
                 }
@@ -80,8 +90,8 @@ function Screen(props){
         for(let j = 0;j<espec.length;j++){
             compList.push(
                 <tr key={j}>
-                    <td style={tables.TbepBoxEsp}>{espec[j].box}</td>
-                    <td style={tables.TbepBoxEsp}>{etl.recortaNombre(espec[j].spec)}</td>
+                    <td className="fs-4" style={tables.TbepBoxEsp}>{espec[j].box}</td>
+                    <td className="fs-4" style={tables.TbepBoxEsp}>{etl.recortaNombre(espec[j].spec)}</td>
                     {getPacientes(espec[j].spec)}
                 </tr>
             );
@@ -93,15 +103,15 @@ function Screen(props){
 
     const [blue,setBlue] = useState(TablaAzul(datos));
 
-    const calendar = new Reloj();
-    const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
-    const [fecha, setFecha] = useState(calendar.getFecha());
+    //const calendar = new Reloj();
+    //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
+    //const [fecha, setFecha] = useState(calendar.getFecha());
 
     useEffect(()=>{
         setInterval(()=>{
-            let hrs = calendar.getHora();
-            setHora(hrs.hora+":"+hrs.minu);
-            setFecha(calendar.getFecha());
+            //let hrs = calendar.getHora();
+            //setHora(hrs.hora+":"+hrs.minu);
+            //setFecha(calendar.getFecha());
             setDatos(new Datos().consultar(Number(props.dpto)));
             setBlue(TablaAzul(datos));
         },5000)
@@ -116,7 +126,7 @@ function Screen(props){
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
                             <Row><Col><h1 className="fs-3 fw-bold">{"Sala de espera departamento "+props.dpto}</h1></Col></Row>{/* Nombre de sala de espera */}
-                            <Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha */}
+                            {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
                     </Col>
@@ -128,11 +138,11 @@ function Screen(props){
                 <div className="col-9">{/* Box X especialista X pacientes y Información*/}
                     
                     <Table bordered>
-                        <thead className="under-header position-sticky z-4 border border-3 border-white">
+                        <thead className="fs-2 under-header position-sticky z-4 border border-3 border-white">
                             <tr>
-                                <th style={tables.TbepHeader}>Box</th>
-                                <th style={tables.TbepHeader}>Especialista</th>
-                                <th style={tables.TbepHeader} colSpan={5}>Pacientes en espera</th>
+                                <th className="p-0" style={tables.TbepHeader}>BOX</th>
+                                <th className="p-0" style={tables.TbepHeader}>ESPECIALISTA</th>
+                                <th className="p-0" style={tables.TbepHeader} colSpan={5}>PACIENTES EN ESPERA</th>
                             </tr>
                         </thead>
                         <tbody>

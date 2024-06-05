@@ -1,0 +1,116 @@
+[
+    {
+      "pantalla": {
+        "idPantalla": 1,
+        "idDepartment": 1,
+        "nombre": "Hospital San Pablo Coquimbo",
+        "estado": 1,
+        "dirIP": null,
+        "reloj": true,
+        "modo_": false,
+        "policlinico": false,
+        "ubicacion": 1
+      },
+      "mensajes": [
+        {
+          "idMensaje": 4,
+          "mensaje": "El horario de atención es de Lunes a jueves de 8:00 a 15:00hrs y viernes de 8:00 a 14:00hrs..",
+          "estado": 1,
+          "hora": "08:00:00",
+          "idPantalla": 1
+        }
+      ],
+      "videos": []
+    },
+    {
+      "pantalla": {
+        "idPantalla": 5,
+        "idDepartment": 21,
+        "nombre": "Torre 2 | 3º piso",
+        "estado": 1,
+        "dirIP": null,
+        "reloj": true,
+        "modo_": false,
+        "policlinico": false,
+        "ubicacion": 0
+      },
+      "mensajes": [],
+      "videos": [
+        {
+          "idVideo": 45,
+          "nombre": "distraido con el telefono.mp4",
+          "extension": ".mp4      ",
+          "estado": 1,
+          "tiempo": "00:00:28"
+        }
+      ]
+    },
+    {
+      "pantalla": {
+        "idPantalla": 6,
+        "idDepartment": 41,
+        "nombre": "principal",
+        "estado": 1,
+        "dirIP": null,
+        "reloj": true,
+        "modo_": false,
+        "policlinico": false,
+        "ubicacion": 7
+      },
+      "mensajes": [
+        {
+          "idMensaje": 16,
+          "mensaje": "Mensaje de prueba",
+          "estado": 1,
+          "hora": "15:00:00",
+          "idPantalla": 6
+        }
+      ],
+      "videos": [
+        {
+          "idVideo": 45,
+          "nombre": "distraido con el telefono.mp4",
+          "extension": ".mp4      ",
+          "estado": 1,
+          "tiempo": "00:00:28"
+        },
+        {
+          "idVideo": 50,
+          "nombre": "INFORMA CAMBIO.mp4",
+          "extension": ".mp4      ",
+          "estado": 1,
+          "tiempo": "00:01:30"
+        }
+      ]
+    },
+    {
+      "pantalla": {
+        "idPantalla": 7,
+        "idDepartment": 21,
+        "nombre": "Torre 2 - 2°Piso",
+        "estado": 1,
+        "dirIP": null,
+        "reloj": true,
+        "modo_": true,
+        "policlinico": false,
+        "ubicacion": 0
+      },
+      "mensajes": [],
+      "videos": []
+    },
+    {
+      "pantalla": {
+        "idPantalla": 8,
+        "idDepartment": 22,
+        "nombre": "Torre 2 - 3° Piso",
+        "estado": 1,
+        "dirIP": null,
+        "reloj": false,
+        "modo_": false,
+        "policlinico": true,
+        "ubicacion": 2
+      },
+      "mensajes": [],
+      "videos": []
+    }
+  ]

@@ -12,7 +12,7 @@ function ProfilePage() {
 function Rutas(){
     return(
         <Routes>
-            <Route path="/">
+            <Route path="/piso/">
                 <Route path=":dpto" element={<ProfilePage/>}/>
             </Route> {/* 👈 Renders at /app/ */}
             <Route path="/test" element={<Test/>}/>
