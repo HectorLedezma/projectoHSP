@@ -1,9 +1,43 @@
 import data from "../data/DataTest.json";
-
-
+import moduticket from "../data/modulos.json";
+import pantallas from "../data/Pantallas.json"
 export class Datos{
     fuente = data;
+    modtick = moduticket;
+    screens = pantallas;
     
+    armaJSON(idd){
+        // esta pantalla
+        let MyScreen = {
+            "nombre":"",
+            "boxs":[],
+
+        }
+
+        //filtrar modulos
+        let newMods = [];
+        for(let i = 0; i<this.modtick.modulos.length;i++){
+            if(this.modtick.modulos[i].idDepartment === idd){
+                newMods.push(this.modtick.modulos[i]);
+            }
+        }
+        //filtrar tickets
+        let newTicks = [];
+        for(let i = 0; i<this.modtick.tickets.length;i++){
+            if(this.modtick.tickets[i].idDepartment === idd){
+                newTicks.push(this.modtick.tickets[i]);
+            }
+        }
+        // get pantalla
+        let newScreen = {};
+        for(let i = 0; i<this.screens.length;i++){
+            if(this.screens[i].pantalla.idDepartment === idd){
+                newScreen = this.screens[i];
+                break;
+            }
+        }
+        return JSON.stringify(newMods);
+    }
     
     consultar(idd){
         let newarray = []

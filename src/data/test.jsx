@@ -1,33 +1,18 @@
-import { Table } from "react-bootstrap";
-import VerticalCarousel from "../components/vcarrousel.jsx";
-import tables from "../styles/tables.json"
+import { useRef, useState } from "react";
+import { Datos } from "../classes/datos";
+
 function Test(){
-
-    const TablaVerde = (x) =>{
-        let res = []
-        for(let i = 0; i<x;i++){
-            res.push(
-                <tr >
-                    <td style={tables.Espera}>Pedro P.</td>
-                    <td style={tables.Espera}>Box {i}</td>
-                </tr>
-            )
-        }
-        return res
-    }
-
+    const [datos,setDatos] = useState([])
+    const dpto = useRef();
+    const Data = new Datos();
     return(
         <div>
-            <Table>
-                <thead>
-                    <tr>
-                        <th colSpan={2}>Pacientes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <VerticalCarousel items={TablaVerde(45)}/>
-                </tbody>
-            </Table>
+            <input ref={dpto} />
+            <button onClick={ev=>{
+                ev.preventDefault();
+                setDatos(Data.armaJSON(Number(dpto.current.value)))
+            }} className="btn btn-primary">Aver</button>
+            <div>{datos}</div>
         </div>
     )
 }
