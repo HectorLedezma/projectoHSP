@@ -34,13 +34,16 @@
         "height":"4vh",
         "backgroundColor":"#FFB900"
     },
-    "_com1":"estados",
+    "_estados":"",
+        "_Amarillo":"",
     "Espera":{
         "backgroundColor":"#FFB900"
     },
+        "_Verde":"",
     "Llamando":{
         "backgroundColor":"#049100"
     },
+        "_Celeste":"",
     "Atendiendo":{
         "backgroundColor":"#00C1CD"
     }
