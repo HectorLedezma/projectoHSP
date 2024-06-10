@@ -1,23 +1,33 @@
 import { useRef, useState } from "react";
-import { Datos } from "../classes/datos";
-
 
 
 function Test(){
-    const [datos,setDatos] = useState({
-        "nombre":"",
-        "boxs":[]
-    })
+    const busca = (txt) =>{
+        let newTxt = "";
+        let txtArray = txt.split("");
+        
+        for(let i = 0;i < txtArray.length; i++){
+            if(!txtArray[i].includes("(")){
+                newTxt = newTxt + txtArray[i];
+            }else{
+                break;
+            }
+        }
+        console.log(txtArray);
+        return newTxt;
+    }
 
-    const dpto = useRef();
-    const Data = new Datos();
+    const [res,setRes] = useState("");
+    const input = useRef();
+
     return(
         <div>
             <form onSubmit={ev=>{
                 ev.preventDefault();
-                setDatos(Data.armaJSON(Number(dpto.current.value)))
-            }}><input ref={dpto} /></form>
-            <div className="bg-primary fs-1">{JSON.stringify(datos)}</div>
+                setRes(busca(input.current.value));
+                
+            }}><input ref={input} /></form>
+            <div className="bg-primary fs-1">{res}</div>
             
         </div>
     )
