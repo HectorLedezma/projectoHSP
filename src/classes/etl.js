@@ -70,7 +70,57 @@ export class ETL{
         return p
     }
 
-    
+    limpiaBox(box){
+        //original
+            //caso 1 "sala proc. trauma"
+            //caso 2 "Trauma1"
+            //caso 3 "Trauma1 (2)"
+            //caso 4 "box5"
+        let SalaArray = box.split(" ");
+        //formato array
+        //  caso 1 ["sala", "proc.", "trauma"]
+        //  caso 2 ["Trauma1"]
+        //  caso 3 ["Trauma1", "(2)"]
+        //  caso 4 ["box5"]
+
+        let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "box")&&(n !== "Box")&&(n !== "de")))
+        //sin "sala", "box" ni conectores
+        //  caso 1 ["proc.", "trauma"]
+        //  caso 2 ["Trauma1"]
+        //  caso 3 ["Trauma1", "(2)"]
+        //  caso 4 ["box5"]
+        
+        const busca = (txt) =>{
+            let newTxt = "";
+            let txtArray = txt.split("");
+            
+            for(let i = 0;i < txtArray.length; i++){
+                if(!txtArray[i].includes("(")){
+                    newTxt = newTxt + txtArray[i];
+                }else{
+                    break;
+                }
+            }
+            return newTxt;
+        }
+
+        let NoChar = busca(NoSala.join(""));
+
+        let nombre = "";
+        for(let i = 0; i<NoChar.length;i++){//unir elementos de arreglo para formar un único String
+            if(i===0){
+                nombre = nombre+NoChar[i].charAt(0).toUpperCase()+NoChar[i].substring(1).toLowerCase();
+            }else{
+                nombre = nombre+" "+NoChar[i];
+            }
+        }
+
+        //objetivo
+        //  caso 1 "proc."
+        //  caso 2 "1"
+        //  caso 3 "1"
+        return NoChar
+    }
 
     
 }

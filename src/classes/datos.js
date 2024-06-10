@@ -7,27 +7,63 @@ export class Datos{
     modtick = moduticket;
     screens = pantallas;
     
+    actualizar(idd){
+        return this.armaJSON(idd);
+    }
+
     armaJSON(idd){
         // esta pantalla
         let MyScreen = {
-            "nombre":"",
-            "boxs":[],
-            "mensaje":[]
+            "nombre":"",//nombre de la pantalla
+            "boxs":[],//salas que posee
+            "mensaje":[]//mensajes de la pantalla
         }
 
-        //filtrar modulos
-        let newMods = [];
-        for(let i = 0; i<this.modtick.modulos.length;i++){
-            if(this.modtick.modulos[i].idDepartment === idd){
-                newMods.push(this.modtick.modulos[i]);
+        
+        
+        const getModul = (idMod) =>{
+            //console.log(this.modtick.modulos);
+            let res = {
+                "idModule": idMod,
+                "nameModule": "Error",
+                "state": 0,
+                "idDepartment": idd,
+                "dirIP": "",
+                "disponible": 0
+            };
+
+            let modXdpto = [];
+            console.log("\n")
+            console.log("===========================================")
+            console.log("\n")
+            console.log("Dpto: "+idd)
+            for(let i = 0; i < this.modtick.modulos.length; i++){
+                //filtrar modulos por dpto.
+                
+                if(this.modtick.modulos[i].idDepartment === idd){
+                    console.log("   "+this.modtick.modulos[i].nameModule)
+                    modXdpto.push(this.modtick.modulos[i]);
+                }
             }
+            console.log("\n")
+            console.log("Box: "+idMod)
+            for(let j = 0; j < modXdpto.length;j++){
+                console.log("   "+modXdpto[j].idModule);
+                if(idMod === modXdpto[j].idModule){
+                    console.log("OK BOX");
+                    res = modXdpto[j];
+                }
+            }
+
+            return res
         }
-        //filtrar tickets
+
+        //filtrar tickets por dpto.
         for(let i = 0; i<this.modtick.tickets.length;i++){
-    
+            // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13
             if(this.modtick.tickets[i].idDepartment === idd && (this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].estado !== 13)){
                 let newDato = {
-                    "name":this.modtick.tickets[i].nameModule,
+                    "name":getModul(this.modtick.tickets[i].idModule).nameModule,
                     "dr":this.modtick.tickets[i].nombre_prof,
                     "paciente":this.modtick.tickets[i].nombre_paciente,
                     "estado":this.modtick.tickets[i].estado,
@@ -38,6 +74,7 @@ export class Datos{
             }
                 
         }
+
         // get pantalla
         
         for(let i = 0; i<this.screens.length;i++){
@@ -61,11 +98,11 @@ export class Datos{
                 doctors.push(datos[i].dr);
                 let subPatient = [];
                 let subPatientR = [];
-                console.log(datos[i].dr+":");
+                //console.log(datos[i].dr+":");
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
                     if(datos[i].dr === datos[j].dr && (!subPatientR.includes(datos[j].paciente))){
                         
-                        console.log("   "+datos[j].paciente);
+                        //console.log("   "+datos[j].paciente);
                         subPatientR.push(datos[j].paciente);
                         subPatient.push({
                             "Nombre":etl.recortaNombreP(datos[j].paciente),
@@ -74,10 +111,10 @@ export class Datos{
                         });
                     }
                 }
-                console.log("\n");
+                //console.log("\n");
                 finalJSON.push({
                     "medico":etl.recortaNombre(datos[i].dr),
-                    "box":datos[i].name,
+                    "box":etl.limpiaBox(datos[i].name),
                     "pacientes":etl.PatientSort(subPatient)
                 })
             }
