@@ -41,7 +41,9 @@
     },
         "_Verde":"",
     "Llamando":{
-        "backgroundColor":"#049100"
+        "color":"rgb(255, 255, 255)",
+        "backgroundColor":"#049100",
+        "fontWeight":"bold"
     },
         "_Celeste":"",
     "Atendiendo":{

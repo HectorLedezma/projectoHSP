@@ -14,15 +14,22 @@ import { Datos } from "../classes/datos";
 function Screen(props){
 
 
-    const TablaVerde = (x) =>{
+    const TablaVerde = (datos) =>{
         let res = []
-        for(let i = 0; i<x;i++){
-            res.push(
-                <tr>
-                    <td className="fs-2 p-0" style={tables.Atendiendo}>Pedro P.</td>
-                    <td className="fs-2 p-0" style={tables.Atendiendo}>Box {i}</td>
-                </tr>
-            )
+        for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
+            try {
+                for(let j = 0; j<datos[i].pacientes.length;j++){
+                    if(datos[i].pacientes[j].Estado === 2){
+                        res.push(
+                        <tr key={datos[i].pacientes[j].Nombre}>
+                            <td className="fs-2 p-0" style={tables.Llamando}>{datos[i].box}</td>
+                            <td className="fs-2 p-0" style={tables.Llamando}>{datos[i].pacientes[j].Nombre}</td>
+                        </tr>)
+                    }
+                }    
+            } catch (error) {
+                console.log(datos)
+            }
         }
         return res
     }
@@ -63,8 +70,8 @@ function Screen(props){
             }
             TBlue.push(
                 <tr key={i}>
-                    <td className="fs-2 p-0" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                    <td className="fs-2 p-0" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                    <td className="fs-2 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                    <td className="fs-2 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
                     {pacientes}
                 </tr>
             );
@@ -73,25 +80,33 @@ function Screen(props){
         return TBlue;
     }
 
+    const JData = new Datos();
 
+    //const [datos,setDatos] = useState(JData.armaJSON(Number(props.dpto)));
 
-    const [datos,setDatos] = useState(new Datos().armaJSON(Number(props.dpto)));
+    //const [blue,setBlue] = useState(TablaAzul(datos));
+    //const [green,setGreen] = useState(TablaVerde(datos))
 
-    const [blue,setBlue] = useState(TablaAzul(datos));
+    const datos = JData.armaJSON(Number(props.dpto));
+
+    const blue = TablaAzul(datos.Datos);
+    const green = TablaVerde(datos.Datos);
+
 
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     //const [fecha, setFecha] = useState(calendar.getFecha());
 
-    useEffect(()=>{
-        setInterval(()=>{
-            //let hrs = calendar.getHora();
-            //setHora(hrs.hora+":"+hrs.minu);
-            //setFecha(calendar.getFecha());
-            setDatos(new Datos().armaJSON(Number(props.dpto)));
+    /*useEffect(()=>{
+        setDatos(JData.armaJSON(Number(props.dpto)));
+        setBlue(TablaAzul(datos.Datos));
+        setGreen(TablaVerde(datos.Datos));
+        /*setInterval(()=>{
+            setDatos(JData.armaJSON(Number(props.dpto)));
             setBlue(TablaAzul(datos.Datos));
+            setGreen(TablaVerde(datos.Datos));
         },1000)
-    })
+    })*/
 
     return(
         <div>{/* cuadro de la pantalla */}
@@ -140,13 +155,13 @@ function Screen(props){
                     <Table bordered>
                         <thead>
                             <tr>
-                                <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Atendiendo} colSpan={2}>
+                                <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Llamando} colSpan={2}>
                                     Últimos llamados
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {TablaVerde(20)}
+                            {green}
                         </tbody>
                     </Table>
                 </div>
