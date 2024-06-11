@@ -76,12 +76,29 @@ export class ETL{
             //caso 2 "Trauma1"
             //caso 3 "Trauma1 (2)"
             //caso 4 "box5"
+        
         let SalaArray = box.split(" ");
+        
         //formato array
         //  caso 1 ["sala", "proc.", "trauma"]
         //  caso 2 ["Trauma1"]
         //  caso 3 ["Trauma1", "(2)"]
         //  caso 4 ["box5"]
+
+        const noBOX = (txt) =>{
+            // Usar una expresión regular para capturar el texto y el número
+            const match = txt.match(/^([a-zA-Z]+)(\d+)$/);
+            // Si hay un match, retornar un arreglo con el texto y el número
+            if (match) {
+                return [match[1], match[2]];
+            } else {
+                // Si no coincide con el patrón esperado, devolver null o un mensaje de error
+                return null;
+            }
+        }
+        if(SalaArray.length === 1){
+            SalaArray = noBOX(SalaArray[0]);
+        }
 
         let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "box")&&(n !== "Box")&&(n !== "de")))
         //sin "sala", "box" ni conectores
