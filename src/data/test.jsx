@@ -13,7 +13,6 @@ function Test(){
                 break;
             }
         }
-        console.log(txtArray);
         return newTxt;
     }
 
