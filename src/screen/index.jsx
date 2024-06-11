@@ -82,31 +82,37 @@ function Screen(props){
 
     const JData = new Datos();
 
-    //const [datos,setDatos] = useState(JData.armaJSON(Number(props.dpto)));
+    const data = JData.armaJSON(Number(props.dpto));
 
-    //const [blue,setBlue] = useState(TablaAzul(datos));
-    //const [green,setGreen] = useState(TablaVerde(datos))
+    const [blue,setBlue] = useState([]);
+    const [green,setGreen] = useState([])
+    const [nombre,setNombre] = useState("");
 
-    const datos = JData.armaJSON(Number(props.dpto));
+    //const datos = JData.armaJSON(Number(props.dpto));
 
-    const blue = TablaAzul(datos.Datos);
-    const green = TablaVerde(datos.Datos);
+    //const blue = TablaAzul(datos.Datos);
+    //const green = TablaVerde(datos.Datos);
 
 
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     //const [fecha, setFecha] = useState(calendar.getFecha());
 
-    /*useEffect(()=>{
-        setDatos(JData.armaJSON(Number(props.dpto)));
-        setBlue(TablaAzul(datos.Datos));
-        setGreen(TablaVerde(datos.Datos));
+    useEffect(()=>{
+        data.then(datos=>{
+            setNombre(datos.Name);
+            setBlue(TablaAzul(datos.Datos));
+            setGreen(TablaVerde(datos.Datos));
+        });
+        //setDatos(JData.armaJSON(Number(props.dpto)));
+        //setBlue(TablaAzul(datos.Datos));
+        //setGreen(TablaVerde(datos.Datos));
         /*setInterval(()=>{
             setDatos(JData.armaJSON(Number(props.dpto)));
             setBlue(TablaAzul(datos.Datos));
             setGreen(TablaVerde(datos.Datos));
-        },1000)
-    })*/
+        },1000)*/
+    })
 
     return(
         <div>{/* cuadro de la pantalla */}
@@ -116,7 +122,7 @@ function Screen(props){
                     <Col xl={3} md={2}><Image src={logoUCEN} className="imagen"/></Col>{/* Logo UCentral */}
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
-                            <Row><Col><h1 className="fs-1 fw-bold">{datos.Name}</h1></Col></Row>{/* Nombre de sala de espera */}
+                            <Row><Col><h1 className="fs-1 fw-bold">{nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
                             {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
