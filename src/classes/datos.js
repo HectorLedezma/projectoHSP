@@ -1,17 +1,29 @@
 import data from "../data/DataTest.json";
 import moduticket from "../data/modulos.json";
 import pantallas from "../data/Pantallas.json"
+import { Connection } from "./connection";
 import { ETL } from "./etl";
 export class Datos{
+    con = new Connection();
     fuente = data;
-    modtick = moduticket;
-    screens = pantallas;
+    modtick = {"tickets":[],"modulos":[]};//moduticket;
+    screens = [
+        {
+            "pantalla":{
+                "idDepartment": 0,
+                "nombre": ""
+            },
+            "mensajes": []
+        }
+    ]//pantallas;
     
     actualizar(idd){
         return this.armaJSON(idd);
     }
 
-    armaJSON(idd){
+    async armaJSON(idd){
+        this.modtick = await this.con.getModules(idd);
+        this.screens = await this.con.getPantalla();
         // esta pantalla
         let MyScreen = {
             "nombre":"",//nombre de la pantalla
@@ -25,7 +37,7 @@ export class Datos{
             //console.log(this.modtick.modulos);
             let res = {
                 "idModule": idMod,
-                "nameModule": "Error",
+                "nameModule": "No definido",
                 "state": 0,
                 "idDepartment": idd,
                 "dirIP": "",
@@ -33,24 +45,18 @@ export class Datos{
             };
 
             let modXdpto = [];
-            console.log("\n")
-            console.log("===========================================")
-            console.log("\n")
-            console.log("Dpto: "+idd)
             for(let i = 0; i < this.modtick.modulos.length; i++){
                 //filtrar modulos por dpto.
                 
                 if(this.modtick.modulos[i].idDepartment === idd){
-                    console.log("   "+this.modtick.modulos[i].nameModule)
+                    //console.log("   "+this.modtick.modulos[i].nameModule)
                     modXdpto.push(this.modtick.modulos[i]);
                 }
             }
-            console.log("\n")
-            console.log("Box: "+idMod)
             for(let j = 0; j < modXdpto.length;j++){
-                console.log("   "+modXdpto[j].idModule);
+                //console.log("   "+modXdpto[j].idModule);
                 if(idMod === modXdpto[j].idModule){
-                    console.log("OK BOX");
+                    
                     res = modXdpto[j];
                 }
             }
@@ -62,6 +68,7 @@ export class Datos{
         for(let i = 0; i<this.modtick.tickets.length;i++){
             // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13
             if(this.modtick.tickets[i].idDepartment === idd && (this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].estado !== 13)){
+                //let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
                 let newDato = {
                     "name":getModul(this.modtick.tickets[i].idModule).nameModule,
                     "dr":this.modtick.tickets[i].nombre_prof,
@@ -76,7 +83,6 @@ export class Datos{
         }
 
         // get pantalla
-        
         for(let i = 0; i<this.screens.length;i++){
             if(this.screens[i].pantalla.idDepartment === idd){
                 MyScreen.nombre = this.screens[i].pantalla.nombre;
