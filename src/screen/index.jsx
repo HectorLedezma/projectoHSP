@@ -42,12 +42,21 @@ function Screen(props){
                     if(datos[i].pacientes[j].Estado >= 2){
                         let estilo = colorState(datos[i].pacientes[j].Estado);
                         // style={estilo}
-                        res.push(
-                            <tr key={datos[i].pacientes[j].Nombre}>
-                                <td className={"fs-2 p-0 "+estilo}>{datos[i].box}</td>
-                                <td className={"fs-2 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
-                            </tr>
-                        )
+                        if(datos[i].pacientes[j].Estado === 2){
+                            res.unshift(
+                                <tr key={datos[i].pacientes[j].Nombre}>
+                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                </tr>
+                            )    
+                        }else{
+                            res.push(
+                                <tr key={datos[i].pacientes[j].Nombre}>
+                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                </tr>
+                            )
+                        }
                     }
                 }    
             } catch (error) {
@@ -86,20 +95,34 @@ function Screen(props){
                             4 y 13: fin (Omitir)
                             8: no llegó (Omitir)
                     */
-                    
-                    pacientes.push(<td key={i+"x"+j} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                    if(datos[i].pacientes[j].Estado === 2){
+                        pacientes.unshift(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                    }else{
+                        pacientes.push(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                    }
                 } 
             } catch (error) {
                 console.log("ay");
                 console.log(error);
             }
-            TBlue.push(
-                <tr key={datos[i].id}>
-                    <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                    <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
-                    {pacientes}
-                </tr>
-            );
+            if((pacientes[0].props.estado === 2 || pacientes[1].props.estado === 2) || pacientes[2].props.estado === 2){
+                TBlue.unshift(
+                    <tr key={datos[i].id}>
+                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                        {pacientes}
+                    </tr>    
+                )    
+            }else{
+                TBlue.push(
+                    <tr key={datos[i].id}>
+                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                        {pacientes}
+                    </tr>
+                );
+            }
+            
         }
 
         return TBlue;
@@ -112,12 +135,6 @@ function Screen(props){
     const [blue,setBlue] = useState([]);
     const [green,setGreen] = useState([])
     const [nombre,setNombre] = useState("");
-
-    //const datos = JData.armaJSON(Number(props.dpto));
-
-    //const blue = TablaAzul(datos.Datos);
-    //const green = TablaVerde(datos.Datos);
-
 
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
@@ -172,9 +189,9 @@ function Screen(props){
                     </Table>
                     <div className="fixed-bottom bg-light col-9">
                         <Row className="mb-3">
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark " style={tables.Info_box_espe}/> Paciente en espera</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark" style={tables.Info_box_call}/> Paciente siendo llamado</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark" style={tables.Info_box_aten}/> Paciente en atención</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                         </Row>
                         <div className="bg-warning fw-bold fs-1">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</div>
                     </div>

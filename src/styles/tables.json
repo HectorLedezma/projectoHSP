@@ -20,19 +20,9 @@
         "backgroundColor":"rgb(10, 148, 0)"
     },
 
-    "Info_box_aten":{
+    "Info_box":{
         "width":"4vw",
-        "height":"4vh",
-        "backgroundColor":"#00C1CD"
-    },"Info_box_call":{
-        "width":"4vw",
-        "height":"4vh",
-        "backgroundColor":"#049100"
-    },
-    "Info_box_espe":{
-        "width":"4vw",
-        "height":"4vh",
-        "backgroundColor":"#FFB900"
+        "height":"4vh"
     },
     "_estados":"",
         "_Amarillo":"",
