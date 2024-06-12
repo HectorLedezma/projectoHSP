@@ -1,32 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Datos } from "../classes/datos";
 
 
 function Test(){
-    const busca = (txt) =>{
-        let newTxt = "";
-        let txtArray = txt.split("");
-        
-        for(let i = 0;i < txtArray.length; i++){
-            if(!txtArray[i].includes("(")){
-                newTxt = newTxt + txtArray[i];
-            }else{
-                break;
-            }
-        }
-        return newTxt;
-    }
-
     const [res,setRes] = useState("");
     const input = useRef();
-
+    const dat = new Datos();
+    useEffect(()=>{
+        dat.armaJSON2(1)
+    })
     return(
         <div>
-            <form onSubmit={ev=>{
-                ev.preventDefault();
-                setRes(busca(input.current.value));
-                
-            }}><input ref={input} /></form>
+            
             <div className="bg-primary fs-1">{res}</div>
+            
             
         </div>
     )

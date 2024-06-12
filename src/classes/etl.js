@@ -4,13 +4,22 @@ export class ETL{
 
     recortaNombre(nombre){
         //N1 N2 A1 A2
-        let NomArray = nombre.split(" ");
-        NomArray = NomArray.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
-        let newNombre = "";
-        try {//          Inicial del 1er nombre.   Apellido
-            newNombre = NomArray[0].charAt(0)+". "+NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();    
-        } catch (error) {
-            newNombre = NomArray[1].charAt(0)+NomArray[1].substring(1).toLowerCase();
+        let newNombre = "v";
+        if(nombre !== null && nombre !== ""){
+            let NomArray = nombre.split(" ");//[N1, N2, A1, A2]
+            
+           //console.log("nombre = "+NomArray);
+            if( NomArray.length > 1){
+                
+                NomArray = NomArray.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
+                try {//          Inicial del 1er nombre.   Apellido
+                    newNombre = NomArray[0].charAt(0)+". "+NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();    
+                } catch (error) {
+                    newNombre = NomArray[1].charAt(0)+NomArray[1].substring(1).toLowerCase();
+                }
+            }else{
+                newNombre = this.abreviar(nombre);
+            }
         }
         
         return newNombre;        
@@ -20,33 +29,60 @@ export class ETL{
         //A1 A2, N1 N2
         //0  1  2  3
         //separar nombres y apellidos
-        let NomArray0 = nombre.split(",");
-        //identificar apellidos compuestos
-        let apellidos = NomArray0[0].split(" ");
-        apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
-        //separar nombres
-        let nombres = NomArray0[1].split(" ");
-        nombres = nombres.filter(n => n !== "");
+       //console.log("nombreP = "+nombre)
+        let newNombre = "P";
+        if(nombre !== null && nombre !== ""){
+            // "404 , P"
+            let NomArray0 = nombre.split(",");
+            // ["404" , "P"]
+            //identificar apellidos compuestos
+            let apellidos = NomArray0[0].split(" ");
+            apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
+            //separar nombres
+            let nombres = NomArray0[1].split(" ");
+           //console.log("nombreP V2 = "+nombres)
+            nombres = nombres.filter(n => n !== "");
+           //console.log("nombreP V3 = "+nombres)
+            let NomArray = nombre.split(" ");
+           //console.log("nombreP V4 = "+NomArray)
+            NomArray = NomArray.filter(n => (n !== "" && n !== ","));
+           //console.log("nombreP V5 = "+NomArray)
+            
+            try {
+                newNombre = nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()+" "+apellidos[0].charAt(0).toUpperCase()+".";
+            } catch (error) {
+               //console.log("ecepcion")
+                newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
 
-        let NomArray = nombre.split(" ");
-        NomArray = NomArray.filter(n => (n !== "" && n !== ","));
-        
-        let newNombre = "";
-        try {
-            newNombre = nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()+" "+apellidos[0].charAt(0).toUpperCase()+".";
-        } catch (error) {
-            newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
+            }
         }
+        
         
         return newNombre;        
     }
 
-    getHora(hrs){
-        let ArrayHora = hrs.split(":");
-        let ArrayNHora = [];
-        for(let i = 0; i<2;i++){
-            ArrayNHora.push(Number(ArrayHora[i]));
+
+    abreviar(txt){
+        let newTxt = ""; 
+        if(txt.length < 10){
+            newTxt = txt
+        }else{
+            newTxt = txt.slice(0,10)
         }
+        return newTxt;
+    }
+
+
+
+    getHora(hrs){
+        let ArrayNHora = [];
+        if(hrs !== null){
+            let ArrayHora = hrs.split(":");
+            for(let i = 0; i<2;i++){
+                ArrayNHora.push(Number(ArrayHora[i]));
+            }
+        }
+        
         return ArrayNHora;
     }
 
@@ -93,7 +129,7 @@ export class ETL{
                 return [match[1], match[2]];
             } else {
                 // Si no coincide con el patrón esperado, devolver null o un mensaje de error
-                return null;
+                return [txt];
             }
         }
         if(SalaArray.length === 1){

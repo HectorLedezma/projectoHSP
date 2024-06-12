@@ -14,17 +14,38 @@ import { Datos } from "../classes/datos";
 function Screen(props){
 
 
+    const colorState = (st) =>{
+        let estilo = tables.Espera;
+        switch (st) {
+            case 2:
+                estilo = tables.Llamando;
+                break;
+            case 3:
+                estilo = tables.Atendiendo;
+                break;
+            case 12:
+                estilo = tables.Atendiendo;
+                break;
+            default:
+                estilo = tables.Espera;
+                break;
+        }
+        return estilo
+    }
+
     const TablaVerde = (datos) =>{
         let res = []
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             try {
                 for(let j = 0; j<datos[i].pacientes.length;j++){
-                    if(datos[i].pacientes[j].Estado === 2){
+                    if(datos[i].pacientes[j].Estado >= 2){
+                        let estilo = colorState(datos[i].pacientes[j].Estado);
                         res.push(
-                        <tr key={datos[i].pacientes[j].Nombre}>
-                            <td className="fs-2 p-0" style={tables.Llamando}>{datos[i].box}</td>
-                            <td className="fs-2 p-0" style={tables.Llamando}>{datos[i].pacientes[j].Nombre}</td>
-                        </tr>)
+                            <tr key={datos[i].pacientes[j].Nombre}>
+                                <td className="fs-2 p-0" style={estilo}>{datos[i].box}</td>
+                                <td className="fs-2 p-0" style={estilo}>{datos[i].pacientes[j].Nombre}</td>
+                            </tr>
+                        )
                     }
                 }    
             } catch (error) {
@@ -37,10 +58,24 @@ function Screen(props){
     const TablaAzul = (datos) => {//funcion que extrae datos del JSON y los pasa a la tabla BOX/Especialista/Paciente
         let TBlue = [];
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
+            
             let pacientes = [];
+            
             try {
-                for(let j = 0; j < 5;j++){
-                    let estilo = tables.Espera;
+                /*let cont = 0;
+                datos[i].pacientes.forEach(element => {
+                    if(cont === 5){
+                        break;
+                    }
+                    let estilo = colorState(element.Estado);
+                    pacientes.push(<td key={element.Nombre} className="fs-2 p-0" style={estilo}>{element.Nombre}</td>);
+                    cont++;
+                });*/
+                const minLim = 4
+                let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
+                for(let j = 0; j < lim;j++){
+
+                    let estilo = colorState(datos[i].pacientes[j].Estado);
                     /* 
                         estados:
                             1 y default: en espera (Amarillo)
@@ -49,29 +84,17 @@ function Screen(props){
                             4 y 13: fin (Omitir)
                             8: no llegó (Omitir)
                     */
-                    switch (datos[i].pacientes[j].Estado) {
-                        case 2:
-                            estilo = tables.Llamando;
-                            break;
-                        case 3:
-                            estilo = tables.Atendiendo;
-                            break;
-                        case 12:
-                            estilo = tables.Atendiendo;
-                            break;
-                        default:
-                            estilo = tables.Espera;
-                            break;
-                    }
-                    pacientes.push(<td key={i+"x"+j} className="fs-2 p-0" style={estilo}>{datos[i].pacientes[j].Nombre}</td>);
-                }    
+                    
+                    pacientes.push(<td key={i+"x"+j} className="fs-1 p-n1" style={estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                } 
             } catch (error) {
-                
+                console.log("ay");
+                console.log(error);
             }
             TBlue.push(
-                <tr key={i}>
-                    <td className="fs-2 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                    <td className="fs-2 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                <tr key={datos[i].id}>
+                    <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                    <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
                     {pacientes}
                 </tr>
             );
@@ -82,7 +105,7 @@ function Screen(props){
 
     const JData = new Datos();
 
-    const data = JData.armaJSON(Number(props.dpto));
+    //const data = JData.armaJSON(Number(props.dpto));
 
     const [blue,setBlue] = useState([]);
     const [green,setGreen] = useState([])
@@ -99,19 +122,18 @@ function Screen(props){
     //const [fecha, setFecha] = useState(calendar.getFecha());
 
     useEffect(()=>{
+        
+        //setDatos(JData.armaJSON(Number(props.dpto)));
+        //setBlue(TablaAzul(datos.Datos));
+        //setGreen(TablaVerde(datos.Datos));
+        let data = JData.armaJSON(Number(props.dpto));
+        //let data2 = JData.armaJSON2(Number(props.dpto));
         data.then(datos=>{
             setNombre(datos.Name);
             setBlue(TablaAzul(datos.Datos));
             setGreen(TablaVerde(datos.Datos));
         });
-        //setDatos(JData.armaJSON(Number(props.dpto)));
-        //setBlue(TablaAzul(datos.Datos));
-        //setGreen(TablaVerde(datos.Datos));
-        /*setInterval(()=>{
-            setDatos(JData.armaJSON(Number(props.dpto)));
-            setBlue(TablaAzul(datos.Datos));
-            setGreen(TablaVerde(datos.Datos));
-        },1000)*/
+        
     })
 
     return(
@@ -136,9 +158,9 @@ function Screen(props){
                     
                     <Table bordered>
                         <thead className="fs-2 under-header position-sticky z-4 border border-3 border-white">
-                            <tr>
-                                <th className="p-0" style={tables.TbepHeader}>BOX</th>
-                                <th className="p-0" style={tables.TbepHeader}>ESPECIALISTA</th>
+                            <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
+                                <th className="p-0" style={tables.TbepHeader}>{"BOX"}</th>
+                                <th className="p-0" style={tables.TbepHeader}>{"ESPECIALISTA"}</th>
                                 <th className="p-0" style={tables.TbepHeader} colSpan={5}>PACIENTES EN ESPERA</th>
                             </tr>
                         </thead>

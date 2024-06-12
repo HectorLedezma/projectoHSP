@@ -1,10 +1,11 @@
 import data from "../data/DataTest.json";
-import moduticket from "../data/modulos.json";
-import pantallas from "../data/Pantallas.json"
+//import moduticket from "../data/modulos.json";
+//import pantallas from "../data/Pantallas.json"
 import { Connection } from "./connection";
 import { ETL } from "./etl";
 export class Datos{
     con = new Connection();
+    etl = new ETL();
     fuente = data;
     modtick = {"tickets":[],"modulos":[]};//moduticket;
     screens = [
@@ -21,9 +22,63 @@ export class Datos{
         return this.armaJSON(idd);
     }
 
-    async armaJSON(idd){
+    async armaJSON2(idd){
+        let MyScreen = {
+            "nombre":"",//nombre de la pantalla
+            "boxs":[],//salas que posee
+            "mensaje":[]//mensajes de la pantalla
+        }
         this.modtick = await this.con.getModules(idd);
         this.screens = await this.con.getPantalla();
+        let llamando = [];
+        this.modtick.modulos.forEach(element => {
+
+            let tickets = this.modtick.tickets.filter(x=>(x.idModule === element.idModule))
+            //console.log("ticket")
+            //console.log(tickets)
+            //console.log(element.idModule)
+            //de los tickest guardar el 1er ticket que se esta llamando
+            for(let i = 0; i<tickets.length;i++){
+                if(tickets[i].estado === 2){
+                    llamando.unshift(tickets[i]);
+                }else{
+                    llamando.push(tickets[i]);
+                }
+            }
+            //console.log(llamando)
+            //guardar el ultimo ticket que se llamó
+            //si el ticket que llamo es nulo => mostrar ultimo !=> mostrar el que esta llamando
+            //si ticket len = 0 => no mostrar
+            //si el.st = 1 => mostrar
+            /**
+             * let llamado = llamando[0];
+
+                let ultimo = tickets[0];
+                let ticket = (llamado === null? ultimo : llamado);
+             */
+            if(llamando.length > 0){
+                for(let i = 0; i<llamando.length;i++){
+                    let newDato = {
+                        "id":llamando[i].id, 
+                        "name":element.nameModule,//modulo
+                        "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType)),
+                        "paciente":(llamando[i].nombre_paciente !== null ? this.etl.recortaNombreP(llamando[i].nombre_paciente): llamando[i].number + llamando[i].letter),
+                        "estado":llamando[i].estado,
+                        "hora":llamando[i].hora_citacion
+                    };
+                    MyScreen.boxs.unshift(newDato);
+                }
+            }
+
+        });
+        console.log(MyScreen)
+    }
+
+    async armaJSON(idd){
+
+        this.modtick = await this.con.getModules(idd);
+        this.screens = await this.con.getPantalla();
+        //console.log(this.modtick);
         // esta pantalla
         let MyScreen = {
             "nombre":"",//nombre de la pantalla
@@ -37,17 +92,17 @@ export class Datos{
             //console.log(this.modtick.modulos);
             let res = {
                 "idModule": idMod,
-                "nameModule": "No definido",
-                "state": 0,
+                "nameModule": "",
+                "state": 1,//vigente 
                 "idDepartment": idd,
                 "dirIP": "",
-                "disponible": 0
+                "disponible": 0//llamando
             };
 
             let modXdpto = [];
             for(let i = 0; i < this.modtick.modulos.length; i++){
                 //filtrar modulos por dpto.
-                
+                //console.log("sala = "+this.modtick.modulos[i].nameModule)
                 if(this.modtick.modulos[i].idDepartment === idd){
                     //console.log("   "+this.modtick.modulos[i].nameModule)
                     modXdpto.push(this.modtick.modulos[i]);
@@ -60,23 +115,32 @@ export class Datos{
                     res = modXdpto[j];
                 }
             }
-
+            if(res.nameModule === ""){
+                //console.log(res)
+            }
             return res
         }
-
+        
         //filtrar tickets por dpto.
         for(let i = 0; i<this.modtick.tickets.length;i++){
-            // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13
-            if(this.modtick.tickets[i].idDepartment === idd && (this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].estado !== 13)){
-                //let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
+            // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13 this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].idDepartment === idd &&
+            if((this.modtick.tickets[i].estado !== 13)){
+                let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
+                if(nombreSala===""){
+                    console.log(this.modtick.tickets[i])
+                    nombreSala = this.modtick.tickets[i].nameModule;
+                }else{
+                    nombreSala = this.etl.limpiaBox(nombreSala)
+                }
                 let newDato = {
-                    "name":getModul(this.modtick.tickets[i].idModule).nameModule,
-                    "dr":this.modtick.tickets[i].nombre_prof,
-                    "paciente":this.modtick.tickets[i].nombre_paciente,
+                    "id":this.modtick.tickets[i].id, 
+                    "name":(nombreSala),//modulo
+                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType)),
+                    "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion
                 };
-                MyScreen.boxs.push(newDato);
+                MyScreen.boxs.unshift(newDato);
                 
             }
                 
@@ -94,7 +158,7 @@ export class Datos{
 
         //MyScreen
         let datos = MyScreen.boxs;
-        const etl = new ETL();
+        
         let doctors = [];
         
         let finalJSON = [];
@@ -103,29 +167,28 @@ export class Datos{
             if(!doctors.includes(datos[i].dr)){
                 doctors.push(datos[i].dr);
                 let subPatient = [];
-                let subPatientR = [];
                 //console.log(datos[i].dr+":");
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
-                    if(datos[i].dr === datos[j].dr && (!subPatientR.includes(datos[j].paciente))){
+                    if(datos[i].dr === datos[j].dr){
                         
                         //console.log("   "+datos[j].paciente);
-                        subPatientR.push(datos[j].paciente);
                         subPatient.push({
-                            "Nombre":etl.recortaNombreP(datos[j].paciente),
+                            "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,
-                            "Hora":etl.getHora(datos[j].hora)
+                            "Hora":this.etl.getHora(datos[j].hora)
                         });
                     }
                 }
                 //console.log("\n");
                 finalJSON.push({
-                    "medico":etl.recortaNombre(datos[i].dr),
-                    "box":etl.limpiaBox(datos[i].name),
-                    "pacientes":etl.PatientSort(subPatient)
+                    "id":datos[i].id,// id
+                    "medico":datos[i].dr,// nombre_prof
+                    "box":datos[i].name,// nombre_box
+                    "pacientes":this.etl.PatientSort(subPatient) //arreglo de pacientes
                 })
             }
         }
-        return {"Name":MyScreen.nombre,"Datos":finalJSON,"Meseajes":MyScreen.mensaje}
+        return {"Name":MyScreen.nombre,"Datos":finalJSON,"Messages":MyScreen.mensaje}
     }
     
     consultar(idd){
