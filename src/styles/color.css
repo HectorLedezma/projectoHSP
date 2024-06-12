@@ -1,0 +1,24 @@
+.llamando{
+    animation: changeBackground 1s infinite;
+}
+
+
+
+
+@keyframes changeBackground {
+    0% {
+        background-color: #FFB900; /* Color inicial */
+        color: #0000;
+        font-weight: 500;
+    }
+    50% {
+        background-color: rgb(158, 255, 79); /* Color en el medio del ciclo */
+        color: #363636;
+        font-weight: 700;
+    }
+    100% {
+        background-color: #049100; /* Regresa al color inicial */
+        color: #ffffff;
+        font-weight: bold;
+    }
+}

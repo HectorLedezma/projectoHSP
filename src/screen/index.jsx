@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import logoHSPC from "../images/hspc.png";
 import logoUCEN from "../images/ucen.png";
 import "../styles/layout.css";
+import "../styles/color.css";
 import tables from "../styles/tables.json";
 //import { Reloj } from "../classes/relog";
 import { useEffect, useState } from "react";
@@ -15,19 +16,19 @@ function Screen(props){
 
 
     const colorState = (st) =>{
-        let estilo = tables.Espera;
+        let estilo = "espera";
         switch (st) {
             case 2:
-                estilo = tables.Llamando;
+                estilo = "llamando";
                 break;
             case 3:
-                estilo = tables.Atendiendo;
+                estilo = "atendiendo";
                 break;
             case 12:
-                estilo = tables.Atendiendo;
+                estilo = "atendiendo";
                 break;
             default:
-                estilo = tables.Espera;
+                estilo = "espera";
                 break;
         }
         return estilo
@@ -40,10 +41,11 @@ function Screen(props){
                 for(let j = 0; j<datos[i].pacientes.length;j++){
                     if(datos[i].pacientes[j].Estado >= 2){
                         let estilo = colorState(datos[i].pacientes[j].Estado);
+                        // style={estilo}
                         res.push(
                             <tr key={datos[i].pacientes[j].Nombre}>
-                                <td className="fs-2 p-0" style={estilo}>{datos[i].box}</td>
-                                <td className="fs-2 p-0" style={estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                <td className={"fs-2 p-0 "+estilo}>{datos[i].box}</td>
+                                <td className={"fs-2 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                             </tr>
                         )
                     }
@@ -85,7 +87,7 @@ function Screen(props){
                             8: no llegó (Omitir)
                     */
                     
-                    pacientes.push(<td key={i+"x"+j} className="fs-1 p-n1" style={estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                    pacientes.push(<td key={i+"x"+j} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                 } 
             } catch (error) {
                 console.log("ay");
