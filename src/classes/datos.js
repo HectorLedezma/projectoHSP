@@ -59,12 +59,6 @@ export class Datos{
             
 
         });
-        console.log(llamando[0]);
-        console.log(llamando[1]);
-        console.log(llamando[2]);
-        console.log(llamando[3]);
-        console.log(llamando[4]);
-        console.log("=================")
         if(llamando.length > 0){
             for(let i = 0; i<llamando.length;i++){
                 
@@ -106,21 +100,12 @@ export class Datos{
                 "dirIP": "",
                 "disponible": 0//llamando
             };
-
-            let modXdpto = [];
-            for(let i = 0; i < this.modtick.modulos.length; i++){
-                //filtrar modulos por dpto.
-                //console.log("sala = "+this.modtick.modulos[i].nameModule)
-                if(this.modtick.modulos[i].idDepartment === idd){
-                    //console.log("   "+this.modtick.modulos[i].nameModule)
-                    modXdpto.push(this.modtick.modulos[i]);
-                }
-            }
-            for(let j = 0; j < modXdpto.length;j++){
+            
+            for(let j = 0; j < this.modtick.modulos.length;j++){
                 //console.log("   "+modXdpto[j].idModule);
-                if(idMod === modXdpto[j].idModule){
+                if(idMod === this.modtick.modulos[j].idModule){
                     
-                    res = modXdpto[j];
+                    res = this.modtick.modulos[j];
                 }
             }
             if(res.nameModule === ""){
@@ -148,10 +133,8 @@ export class Datos{
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion
                 };
-                MyScreen.boxs.unshift(newDato);
-                
+                MyScreen.boxs.unshift(newDato);   
             }
-                
         }
 
         // get pantalla
@@ -172,14 +155,13 @@ export class Datos{
         let finalJSON = [];
 
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
-            if(!doctors.includes(datos[i].dr)){
+            if(!doctors.includes(datos[i].dr)){//pregunta si el nombre del dr no fue considerado
                 doctors.push(datos[i].dr);
-                let subPatient = [];
+                let subPatient = [];//arreglo de tickets a nombre de un mismo medico
                 //console.log(datos[i].dr+":");
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
+                    //para capturar todos los tickets que correspondan al mismo medico
                     if(datos[i].dr === datos[j].dr){
-                        
-                        //console.log("   "+datos[j].paciente);
                         subPatient.push({
                             "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,
