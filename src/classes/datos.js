@@ -56,22 +56,30 @@ export class Datos{
                 let ultimo = tickets[0];
                 let ticket = (llamado === null? ultimo : llamado);
              */
-            if(llamando.length > 0){
-                for(let i = 0; i<llamando.length;i++){
-                    let newDato = {
-                        "id":llamando[i].id, 
-                        "name":element.nameModule,//modulo
-                        "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType)),
-                        "paciente":(llamando[i].nombre_paciente !== null ? this.etl.recortaNombreP(llamando[i].nombre_paciente): llamando[i].number + llamando[i].letter),
-                        "estado":llamando[i].estado,
-                        "hora":llamando[i].hora_citacion
-                    };
-                    MyScreen.boxs.unshift(newDato);
-                }
-            }
+            
 
         });
-        console.log(MyScreen)
+        console.log(llamando[0]);
+        console.log(llamando[1]);
+        console.log(llamando[2]);
+        console.log(llamando[3]);
+        console.log(llamando[4]);
+        console.log("=================")
+        if(llamando.length > 0){
+            for(let i = 0; i<llamando.length;i++){
+                
+                let newDato = {
+                    "id":llamando[i].id, 
+                    "name":llamando[i].nameModule,//modulo
+                    "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType)),
+                    "paciente":(llamando[i].nombre_paciente !== null ? this.etl.recortaNombreP(llamando[i].nombre_paciente): llamando[i].number + llamando[i].letter),
+                    "estado":llamando[i].estado,
+                    "hora":llamando[i].hora_citacion
+                };
+                MyScreen.boxs.push(newDato);
+            }
+        }
+        return MyScreen
     }
 
     async armaJSON(idd){
@@ -226,4 +234,5 @@ export class Datos{
         return this.fuente;
     }
 }
+
 

@@ -175,5 +175,10 @@ export class ETL{
         return NoChar
     }
 
+
+    ticketSort(tickets){
+        
+    }
+
     
 }
