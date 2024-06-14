@@ -195,14 +195,22 @@ function Screen(props){
                             {blue}
                         </tbody>
                     </Table>
+
                     <div className="fixed-bottom z-4 bg-light col-9">
                         <Row className="m-1">
                             <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
                             <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
                             <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                         </Row>
-                        <div className="bg-warning fw-bold fs-3">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</div>
+                        <Row>
+                            <div className="bg-warning fw-bold fs-3 ticker-container">
+                                <div className="ticker">
+                                    Recuerde que la atención es según la hora de la cita, NO por orden de llegada
+                                </div>
+                            </div>
+                        </Row>
                     </div>
+
                 </div>
                 
                 <div className="col-3">{/* Paciente X llamado */}
