@@ -13,14 +13,14 @@ export class Connection {
 
     async getModules(dpto){
         try {
-            
             const res = await axios.post(process.env.REACT_APP_MODULES_TEST+dpto);
+            //console.log("Conexión con el servidor establecida")
             await this.esperar(1000);
             this.blog = res.data;
         } catch (error) {
-            console.log("algo salió mal aqui en getModules")
-            console.log(error);
-            this.blog = String(error);
+            console.log("No hay conexión con el servidor")
+            await this.esperar(1000);
+            this.blog = {"tickets":[],"modulos":[]};
         }
         return this.blog
     }
@@ -28,12 +28,19 @@ export class Connection {
     async getPantalla(){
         try {
             const res = await axios.post(process.env.REACT_APP_SCREENS_TEST);
+            //console.log("Conexión con el servidor establecida")
             await this.esperar(1000);
             this.blog = res.data;
         } catch (error) {
-            console.log("algo salió mal aqui en getPantalla")
-            console.log(error);
-            this.blog = String(error);
+            console.log("No hay conexión con el servidor")
+            //console.log(error);
+            this.blog = [{
+                "pantalla":{
+                    "idDepartment": 0,
+                    "nombre": "No hay conexión con el servidor"
+                },
+                "mensajes": []
+            }];
         }
         return this.blog
     }
