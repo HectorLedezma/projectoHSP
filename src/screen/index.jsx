@@ -21,14 +21,11 @@ function Screen(props){
             case 2:
                 estilo = "llamando";
                 break;
-            case 3:
-                estilo = "atendiendo";
-                break;
-            case 12:
-                estilo = "atendiendo";
+            case 1:
+                estilo = "espera";
                 break;
             default:
-                estilo = "espera";
+                estilo = "atendiendo";
                 break;
         }
         return estilo
@@ -45,15 +42,15 @@ function Screen(props){
                         if(datos[i].pacientes[j].Estado === 2){
                             res.unshift(
                                 <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )    
                         }else{
                             res.push(
                                 <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={"fs-1 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )
                         }
@@ -68,10 +65,10 @@ function Screen(props){
 
     const TablaAzul = (datos) => {//funcion que extrae datos del JSON y los pasa a la tabla BOX/Especialista/Paciente
         let TBlue = [];
+        let verdes = [];
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             
             let pacientes = [];
-            
             try {
                 /*let cont = 0;
                 datos[i].pacientes.forEach(element => {
@@ -82,6 +79,8 @@ function Screen(props){
                     pacientes.push(<td key={element.Nombre} className="fs-2 p-0" style={estilo}>{element.Nombre}</td>);
                     cont++;
                 });*/
+                verdes.push(false);
+                
                 const minLim = 4
                 let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
@@ -96,28 +95,37 @@ function Screen(props){
                             8: no llegó (Omitir)
                     */
                     if(datos[i].pacientes[j].Estado === 2){
-                        pacientes.unshift(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                        pacientes.unshift(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                        verdes[i] = true;
                     }else{
-                        pacientes.push(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-1 p-n1 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                        pacientes.push(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                        
                     }
-                } 
+                }
+                
+                if(verdes[i]){
+                    console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
+                    TBlue.unshift(
+                        <tr key={datos[i].id +"/"+i}>
+                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                            {pacientes}
+                        </tr>    
+                    )    
+                }else{
+                    TBlue.push(
+                        <tr key={datos[i].id}>
+                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                            {pacientes}
+                        </tr>
+                    );
+                }
             } catch (error) {
-                console.log("ay");
-                console.log(error);
-            }
-            if((pacientes[0].props.estado === 2 || pacientes[1].props.estado === 2) || pacientes[2].props.estado === 2){
-                TBlue.unshift(
-                    <tr key={datos[i].id}>
-                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
-                        {pacientes}
-                    </tr>    
-                )    
-            }else{
                 TBlue.push(
                     <tr key={datos[i].id}>
-                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                        <td className="fs-1 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                        <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
+                        <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
                         {pacientes}
                     </tr>
                 );
@@ -176,7 +184,7 @@ function Screen(props){
                 <div className="col-9">{/* Box X especialista X pacientes y Información*/}
                     
                     <Table bordered>
-                        <thead className="fs-2 under-header position-sticky z-4 border border-3 border-white">
+                        <thead className="fs-4 under-header position-sticky z-4 border border-3 border-white">
                             <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
                                 <th className="p-0" style={tables.TbepHeader}>{"BOX"}</th>
                                 <th className="p-0" style={tables.TbepHeader}>{"ESPECIALISTA"}</th>
@@ -187,13 +195,13 @@ function Screen(props){
                             {blue}
                         </tbody>
                     </Table>
-                    <div className="fixed-bottom bg-light col-9">
-                        <Row className="mb-3">
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold"><div className="m-3 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
+                    <div className="fixed-bottom z-4 bg-light col-9">
+                        <Row className="m-1">
+                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                         </Row>
-                        <div className="bg-warning fw-bold fs-1">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</div>
+                        <div className="bg-warning fw-bold fs-3">Recuerde que la atención es según la hora de la cita, NO por orden de llegada</div>
                     </div>
                 </div>
                 
