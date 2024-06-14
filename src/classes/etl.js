@@ -64,12 +64,44 @@ export class ETL{
 
     abreviar(txt){
         let newTxt = ""; 
-        if(txt.length < 10){
+        const lim = 5
+        if(txt.length < lim){
             newTxt = txt
         }else{
-            newTxt = txt.slice(0,10)
+            newTxt = txt.slice(0,lim)+"."
         }
         return newTxt;
+    }
+
+    abreviaComplex(txt){
+
+        //Ej: "Sala de procedimientos especiales"
+        let txtMod = txt.split(" ");//crea un arreglo de palabras
+        
+        //["Sala", "de", "procedimientos", "especiales"]
+        const lenSort = (l) =>{
+            for(let i = 1; i<l.length;i++){
+                let auxi = i;
+                while(true){
+                    if(l[auxi].length > l[auxi-1].length){
+                        let aux = l[auxi];
+                        l[auxi] = l[auxi-1];
+                        l[auxi-1] = aux;
+                    }
+                    if(auxi > 1){
+                        auxi = auxi-1
+                    }else{
+                        break;
+                    }
+                }
+            }
+            return l
+        }
+        if(txtMod.length > 1){
+            txtMod = lenSort(txtMod);//ordena el arreglo por el largo de cada palabra
+        }
+        return this.abreviar(txtMod[0]);//retorna la palabra mas larga abreviada
+        
     }
 
 
@@ -84,6 +116,18 @@ export class ETL{
         }
         
         return ArrayNHora;
+    }
+
+    estateSort(p){
+        let pl = []
+        for(let i = 0; i<p.length;i++){
+            if(p[i].Estado === 2){
+                pl.unshift(p[i]);
+            }else{
+                pl.push(p[i]);
+            }
+        }
+        return pl
     }
 
     PatientSort(p){
@@ -103,7 +147,7 @@ export class ETL{
 
             }
         }
-        return p
+        return this.estateSort(p);
     }
 
     limpiaBox(box){
@@ -173,6 +217,39 @@ export class ETL{
         //  caso 2 "1"
         //  caso 3 "1"
         return NoChar
+    }
+
+    limpiaBox2(box){
+        //console.log("box = "+box);
+        let final = ""
+        const numeros = ["1","2","3","4","5","6","7","8","9","0"];
+        //ver si el nombre de la sala hace referencia a un box
+        const hayBox = box.includes("box") || box.includes("Box") || box.includes("BOX");
+        //console.log("box? = "+hayBox);
+        if(hayBox){
+            let parentesis = box.charAt(0) === '(';//revisar si hay paréntesis
+            //console.log("(? = "+parentesis);
+            for(let i = 0;i<box.length;i++){
+                //Ej: "Box 21 especial (1)";
+                if(!parentesis){//si no hay paréntesis
+                    if(numeros.includes(box.charAt(i))){//revisar si hay numeros
+                        final = final+box.charAt(i);
+                    }
+                }
+                if(i < box.length-1){//si aun quedan caracteres por evaluar
+                    if(box.charAt(i+1) === ')'){//revisar si se cierran paréntesis
+                        parentesis = false;//establece que no habrán mas paréntesis
+                    }else{
+                        parentesis = box.charAt(i+1) === '(';//revisar si hay paréntesis en el sig char
+                    }
+                    
+                }
+            }
+        }else{
+            final = this.abreviaComplex(box);
+        }
+        //console.log("final = "+final);
+        return final
     }
 
 

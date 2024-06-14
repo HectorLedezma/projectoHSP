@@ -104,12 +104,8 @@ export class Datos{
             for(let j = 0; j < this.modtick.modulos.length;j++){
                 //console.log("   "+modXdpto[j].idModule);
                 if(idMod === this.modtick.modulos[j].idModule){
-                    
                     res = this.modtick.modulos[j];
                 }
-            }
-            if(res.nameModule === ""){
-                //console.log(res)
             }
             return res
         }
@@ -120,8 +116,8 @@ export class Datos{
             if((this.modtick.tickets[i].estado !== 13)){
                 let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
                 if(nombreSala===""){
-                    console.log(this.modtick.tickets[i])
-                    nombreSala = this.modtick.tickets[i].nameModule;
+                    //console.log(this.modtick.tickets[i])
+                    nombreSala = this.etl.limpiaBox2(this.modtick.tickets[i].nameModule);
                 }else{
                     nombreSala = this.etl.limpiaBox(nombreSala)
                 }
