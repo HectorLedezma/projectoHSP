@@ -81,30 +81,34 @@ function Screen(props){
                 });*/
                 verdes.push(false);
                 
-                const minLim = 4
-                let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
+                const lim = 4
+                //let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
-
-                    let estilo = colorState(datos[i].pacientes[j].Estado);
-                    /* 
-                        estados:
-                            1 y default: en espera (Amarillo)
-                            2: llamando (Verde)
-                            3 y 12: en atención (Celeste)
-                            4 y 13: fin (Omitir)
-                            8: no llegó (Omitir)
-                    */
-                    if(datos[i].pacientes[j].Estado === 2){
-                        pacientes.unshift(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
-                        verdes[i] = true;
+                    //j-1 => 2 -> [0, 1, 2] // lim = 4 -> [0, 1, 2, 3]
+                    if(datos[i].pacientes.length-1 >= j){
+                        let estilo = colorState(datos[i].pacientes[j].Estado);
+                        /* 
+                            estados:
+                                1 y default: en espera (Amarillo)
+                                2: llamando (Verde)
+                                3 y 12: en atención (Celeste)
+                                4 y 13: fin (Omitir)
+                                8: no llegó (Omitir)
+                        */
+                        if(datos[i].pacientes[j].Estado === 2){
+                            pacientes.unshift(<td key={i+"x"+j} className={"align-items-center fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            verdes[i] = true;
+                        }else{
+                            pacientes.push(<td key={i+"x"+j} className={"align-items-center fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            
+                        }
                     }else{
-                        pacientes.push(<td key={i+"x"+j} estado={datos[i].pacientes[j].Estado} className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
-                        
+                        pacientes.push(<td key={i+"x"+j} >{" "}</td>);
                     }
                 }
                 
                 if(verdes[i]){
-                    console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
+                    //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
                     TBlue.unshift(
                         <tr key={datos[i].id +"/"+i}>
                             <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
@@ -122,6 +126,7 @@ function Screen(props){
                     );
                 }
             } catch (error) {
+
                 TBlue.push(
                     <tr key={datos[i].id}>
                         <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
@@ -144,25 +149,31 @@ function Screen(props){
     const [green,setGreen] = useState([])
     const [nombre,setNombre] = useState("");
 
+    const [anima,setAnima] = useState("");
+    const [animaC,setAnimaC] = useState("");
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     //const [fecha, setFecha] = useState(calendar.getFecha());
 
     useEffect(()=>{
         
-        //setDatos(JData.armaJSON(Number(props.dpto)));
-        //setBlue(TablaAzul(datos.Datos));
-        //setGreen(TablaVerde(datos.Datos));
         let data = JData.armaJSON(Number(props.dpto));
-        //let data2 = JData.armaJSON2(Number(props.dpto));
+        
         data.then(datos=>{
             setNombre(datos.Name);
             setBlue(TablaAzul(datos.Datos));
             setGreen(TablaVerde(datos.Datos));
+            if(blue.length > 12){
+                setAnimaC("ticker-table-container");
+                setAnima("ticker-table");
+            }else{
+                setAnimaC("");
+                setAnima("");
+            }
         });
-        
     })
 
+    
     return(
         <div>{/* cuadro de la pantalla */}
             
@@ -182,19 +193,21 @@ function Screen(props){
             
             <div className="d-flex justify-content-around">{/* Pacientes, especialistas, llamados y información */}
                 <div className="col-9">{/* Box X especialista X pacientes y Información*/}
+                    <div className={animaC}>
+                        <Table bordered className={anima}>
+                            <thead className="fs-4 position-sticky z-3">
+                                <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{"BOX"}</th>
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{"ESPECIALISTA"}</th>
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader} colSpan={4}>PACIENTES EN ESPERA</th>
+                                </tr>
+                            </thead>
+                            <tbody className="z-0">
+                                {blue}
+                            </tbody>
+                        </Table>
+                    </div>
                     
-                    <Table bordered>
-                        <thead className="fs-4 under-header position-sticky z-4 border border-3 border-white">
-                            <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                <th className="p-0" style={tables.TbepHeader}>{"BOX"}</th>
-                                <th className="p-0" style={tables.TbepHeader}>{"ESPECIALISTA"}</th>
-                                <th className="p-0" style={tables.TbepHeader} colSpan={5}>PACIENTES EN ESPERA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {blue}
-                        </tbody>
-                    </Table>
 
                     <div className="fixed-bottom z-4 bg-light col-9">
                         <Row className="m-1">
