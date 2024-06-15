@@ -65,7 +65,7 @@ export class Datos{
                 let newDato = {
                     "id":llamando[i].id, 
                     "name":llamando[i].nameModule,//modulo
-                    "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType)),
+                    "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType,5)),
                     "paciente":(llamando[i].nombre_paciente !== null ? this.etl.recortaNombreP(llamando[i].nombre_paciente): llamando[i].number + llamando[i].letter),
                     "estado":llamando[i].estado,
                     "hora":llamando[i].hora_citacion
@@ -124,7 +124,7 @@ export class Datos{
                 let newDato = {
                     "id":this.modtick.tickets[i].id, 
                     "name":(nombreSala),//modulo
-                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType)),
+                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,5)),
                     "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion
@@ -153,8 +153,8 @@ export class Datos{
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             if(!doctors.includes(datos[i].name)){//pregunta si el nombre del box no fue considerado
                 doctors.push(datos[i].name);
-                let subPatient = [];//arreglo de tickets a nombre de un mismo medico
-                //console.log(datos[i].dr+":");
+                let subPatient = [];//arreglo de tickets a nombre de un mismo box
+                console.log(datos[i]);
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
                     //para capturar todos los tickets que correspondan al mismo medico
                     if(datos[i].name === datos[j].name){
@@ -165,7 +165,7 @@ export class Datos{
                         });
                     }
                 }
-                //console.log("\n");
+                //
                 finalJSON.push({
                     "id":datos[i].id,// id
                     "medico":datos[i].dr,// nombre_prof
@@ -175,7 +175,7 @@ export class Datos{
             }
         }
         const respuesta = {"Name":MyScreen.nombre,"Datos":finalJSON,"Messages":MyScreen.mensaje}
-        console.log(respuesta)
+        console.log("\n");
         return respuesta
     }
     

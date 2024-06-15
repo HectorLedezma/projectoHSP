@@ -13,12 +13,14 @@ export class ETL{
                 
                 NomArray = NomArray.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
                 try {//          Inicial del 1er nombre.   Apellido
-                    newNombre = NomArray[0].charAt(0)+". "+NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();    
+                    let apellido = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
+                    newNombre = NomArray[0].charAt(0)+". "+(apellido.length>=9? this.abreviar(apellido,8):apellido);
                 } catch (error) {
-                    newNombre = NomArray[1].charAt(0)+NomArray[1].substring(1).toLowerCase();
+                    let exNombre = NomArray[1].charAt(0)+NomArray[1].substring(1).toLowerCase();
+                    newNombre = (exNombre.length>=12? this.abreviar(exNombre,11):exNombre);
                 }
             }else{
-                newNombre = this.abreviar(nombre);
+                newNombre = this.abreviar(nombre,5);
             }
         }
         
@@ -62,9 +64,9 @@ export class ETL{
     }
 
 
-    abreviar(txt){
+    abreviar(txt,lim){
         let newTxt = ""; 
-        const lim = 5
+        
         if(txt.length < lim){
             newTxt = txt
         }else{
@@ -100,7 +102,7 @@ export class ETL{
         if(txtMod.length > 1){
             txtMod = lenSort(txtMod);//ordena el arreglo por el largo de cada palabra
         }
-        return this.abreviar(txtMod[0]);//retorna la palabra mas larga abreviada
+        return this.abreviar(txtMod[0],5);//retorna la palabra mas larga abreviada
         
     }
 
