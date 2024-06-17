@@ -37,7 +37,8 @@ export class Connection {
             this.blog = [{
                 "pantalla":{
                     "idDepartment": 0,
-                    "nombre": "No hay conexión con el servidor"
+                    "nombre": "No hay conexión con el servidor",
+                    "policlinico":false
                 },
                 "mensajes": []
             }];

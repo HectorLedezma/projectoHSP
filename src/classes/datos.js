@@ -65,7 +65,7 @@ export class Datos{
                 let newDato = {
                     "id":llamando[i].id, 
                     "name":llamando[i].nameModule,//modulo
-                    "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType,5)),
+                    "dr":(llamando[i].nombre_prof !== null? this.etl.recortaNombre(llamando[i].nombre_prof) : this.etl.abreviar(llamando[i].nameType,4)),
                     "paciente":(llamando[i].nombre_paciente !== null ? this.etl.recortaNombreP(llamando[i].nombre_paciente): llamando[i].number + llamando[i].letter),
                     "estado":llamando[i].estado,
                     "hora":llamando[i].hora_citacion
@@ -85,7 +85,8 @@ export class Datos{
         let MyScreen = {
             "nombre":"",//nombre de la pantalla
             "boxs":[],//salas que posee
-            "mensaje":[]//mensajes de la pantalla
+            "mensaje":[],//mensajes de la pantalla
+            "poli":false
         }
 
         
@@ -124,7 +125,7 @@ export class Datos{
                 let newDato = {
                     "id":this.modtick.tickets[i].id, 
                     "name":(nombreSala),//modulo
-                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,5)),
+                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15)),
                     "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion
@@ -138,6 +139,7 @@ export class Datos{
             if(this.screens[i].pantalla.idDepartment === idd){
                 MyScreen.nombre = this.screens[i].pantalla.nombre;
                 MyScreen.mensaje = this.screens[i].mensajes
+                MyScreen.poli = this.screens[i].pantalla.policlinico
                 break;
             }
         }
@@ -174,7 +176,7 @@ export class Datos{
                 })
             }
         }
-        const respuesta = {"Name":MyScreen.nombre,"Datos":finalJSON,"Messages":MyScreen.mensaje}
+        const respuesta = {"poli":MyScreen.poli,"Name":MyScreen.nombre,"Datos":finalJSON,"Messages":MyScreen.mensaje}
         console.log("\n");
         return respuesta
     }

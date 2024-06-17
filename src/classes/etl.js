@@ -14,7 +14,7 @@ export class ETL{
                 NomArray = NomArray.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
                 try {//          Inicial del 1er nombre.   Apellido
                     let apellido = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
-                    newNombre = NomArray[0].charAt(0)+". "+(apellido.length>=9? this.abreviar(apellido,8):apellido);
+                    newNombre = NomArray[0].charAt(0)+". "+(apellido.length>=9? this.abreviar(apellido,6):apellido);
                 } catch (error) {
                     let exNombre = NomArray[1].charAt(0)+NomArray[1].substring(1).toLowerCase();
                     newNombre = (exNombre.length>=12? this.abreviar(exNombre,11):exNombre);
@@ -51,7 +51,7 @@ export class ETL{
            //console.log("nombreP V5 = "+NomArray)
             
             try {
-                newNombre = nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()+" "+apellidos[0].charAt(0).toUpperCase()+".";
+                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),6):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+apellidos[0].charAt(0).toUpperCase()+".";
             } catch (error) {
                //console.log("ecepcion")
                 newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
@@ -67,7 +67,7 @@ export class ETL{
     abreviar(txt,lim){
         let newTxt = ""; 
         
-        if(txt.length < lim){
+        if(txt.length <= lim){
             newTxt = txt
         }else{
             newTxt = txt.slice(0,lim)+"."
@@ -102,7 +102,7 @@ export class ETL{
         if(txtMod.length > 1){
             txtMod = lenSort(txtMod);//ordena el arreglo por el largo de cada palabra
         }
-        return this.abreviar(txtMod[0],5);//retorna la palabra mas larga abreviada
+        return this.abreviar(txtMod[0],4);//retorna la palabra mas larga abreviada
         
     }
 
@@ -182,7 +182,7 @@ export class ETL{
             SalaArray = noBOX(SalaArray[0]);
         }
 
-        let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "box")&&(n !== "Box")&&(n !== "de")))
+        let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "box")&&(n !== "Box")&&(n !== "de")&&(n !== "Ventanilla")))
         //sin "sala", "box" ni conectores
         //  caso 1 ["proc.", "trauma"]
         //  caso 2 ["Trauma1"]
