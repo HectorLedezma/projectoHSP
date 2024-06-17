@@ -146,8 +146,13 @@ function Screen(props){
     //const data = JData.armaJSON(Number(props.dpto));
 
     const [blue,setBlue] = useState([]);
+    const [blue2,setBlue2] = useState([]);
     const [green,setGreen] = useState([])
-    const [nombre,setNombre] = useState("");
+    const [Pantalla,setPantalla] = useState({
+        "nombre":"",//nombre de la pantalla
+        "mensaje":[],//mensajes de la pantalla
+        "poli":false
+    });
 
     const [anima,setAnima] = useState("");
     const [animaC,setAnimaC] = useState("");
@@ -160,15 +165,21 @@ function Screen(props){
         let data = JData.armaJSON(Number(props.dpto));
         
         data.then(datos=>{
-            setNombre(datos.Name);
+            setPantalla({
+                nombre:datos.Name,
+                mensaje:datos.Messages,
+                poli:datos.poli
+            });
             setBlue(TablaAzul(datos.Datos));
             setGreen(TablaVerde(datos.Datos));
             if(blue.length > 12){
                 setAnimaC("ticker-table-container");
                 setAnima("ticker-table");
+                setBlue2(blue)
             }else{
                 setAnimaC("");
                 setAnima("");
+                setBlue2([])
             }
         });
     })
@@ -182,7 +193,7 @@ function Screen(props){
                     <Col xl={3} md={2}><Image src={logoUCEN} className="imagen"/></Col>{/* Logo UCentral */}
                     <Col className="d-flex align-items-center justify-content-center" xl={6}>
                         <Container>
-                            <Row><Col><h1 className="fs-1 fw-bold">{nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
+                            <Row><Col><h1 className="fs-1 fw-bold">{Pantalla.nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
                             {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
@@ -197,13 +208,14 @@ function Screen(props){
                         <Table bordered className={anima}>
                             <thead className="fs-4 position-sticky z-3">
                                 <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{"BOX"}</th>
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{"ESPECIALISTA"}</th>
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader} colSpan={4}>PACIENTES EN ESPERA</th>
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{Pantalla.poli? "BOX" : "MODULO"}</th>
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{Pantalla.poli? "ESPECIALISTA" : "LUGAR"}</th>
+                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader} colSpan={Pantalla.poli? 4:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                 </tr>
                             </thead>
                             <tbody className="z-0">
                                 {blue}
+                                {blue2}
                             </tbody>
                         </Table>
                     </div>

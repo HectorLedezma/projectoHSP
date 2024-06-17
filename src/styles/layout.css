@@ -35,14 +35,15 @@
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: "Roboto", sans-serif;
   }
   
   /* Estilo para la tabla */
   .ticker-table {
     width: 100%;
     border-collapse: collapse;
+    padding: 0px;
     table-layout: fixed; /* Asegura un ancho uniforme para las celdas */
+    font-family: "Roboto", sans-serif;
     
   }
   
@@ -80,8 +81,8 @@
   
   /* Animación */
   @keyframes ticker-vertical {
-    0% { transform: translateY(100%); }
-    100% { transform: translateY(-100%); }
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(-50%); }
   }
   
 
