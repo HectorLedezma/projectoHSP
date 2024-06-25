@@ -79,6 +79,7 @@ export class Datos{
     async armaJSON(idd){
 
         this.modtick = await this.con.getModules(idd);
+        //this.modtick.tickets.map(t=>t.nameModule === "Oficina Dermatologia"? console.log(t): "");
         this.screens = await this.con.getPantalla();
         //console.log(this.modtick);
         // esta pantalla
@@ -177,7 +178,7 @@ export class Datos{
             }
         }
         const respuesta = {"poli":MyScreen.poli,"Name":this.etl.titulo(MyScreen.nombre),"Datos":finalJSON,"Messages":MyScreen.mensaje}
-        //console.log("\n");
+        
         return respuesta
     }
     
@@ -212,8 +213,9 @@ export class Datos{
     }
 
 
-    getDatos(){
-        return this.fuente;
+    async getScreens(){
+        this.screens = await this.con.getPantalla();
+        return this.screens;
     }
 }
 

@@ -27,9 +27,9 @@ export class Connection {
 
     async getPantalla(){
         try {
+            await this.esperar(1000);
             const res = await axios.post(process.env.REACT_APP_SCREENS_TEST);
             //console.log("Conexión con el servidor establecida")
-            await this.esperar(1000);
             this.blog = res.data;
         } catch (error) {
             console.log("No hay conexión con el servidor")

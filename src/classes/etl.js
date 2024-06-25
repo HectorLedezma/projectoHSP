@@ -29,6 +29,7 @@ export class ETL{
 
     recortaNombreP(nombre){
         //A1 A2, N1 N2
+        //A1, N1
         //0  1  2  3
         //separar nombres y apellidos
        //console.log("nombreP = "+nombre)
@@ -49,9 +50,14 @@ export class ETL{
            //console.log("nombreP V4 = "+NomArray)
             NomArray = NomArray.filter(n => (n !== "" && n !== ","));
            //console.log("nombreP V5 = "+NomArray)
-            
+           const iniApe = (ape)=>{
+                let ini = "";
+                ape.map(a=>ini=ini+a.charAt(0).toUpperCase());
+                return ini;
+           }
+            //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
             try {
-                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),6):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+apellidos[0].charAt(0).toUpperCase()+".";
+                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),6):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
             } catch (error) {
                //console.log("ecepcion")
                 newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();

@@ -9,6 +9,7 @@ import tables from "../styles/tables.json";
 import { useEffect, useState } from "react";
 import { Datos } from "../classes/datos";
 import Carrusel from "../components/carrusel";
+import { Outlet } from "react-router-dom";
 
 /* border border-primary */
 
@@ -43,15 +44,15 @@ function Screen(props){
                         if(datos[i].pacientes[j].Estado === 2){
                             res.unshift(
                                 <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                    <td className={"p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={" p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )    
                         }else{
                             res.push(
-                                <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={"fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                <tr key={datos[i].pacientes[j].Nombre} state={datos[i].pacientes[j].Estado}>
+                                    <td className={" p-0 "+estilo}>{datos[i].box}</td>
+                                    <td className={" p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )
                         }
@@ -82,7 +83,7 @@ function Screen(props){
                 });*/
                 verdes.push(false);
                 
-                const lim = 4
+                const lim = 3
                 //let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
                     //j-1 => 2 -> [0, 1, 2] // lim = 4 -> [0, 1, 2, 3]
@@ -92,16 +93,20 @@ function Screen(props){
                             estados:
                                 1 y default: en espera (Amarillo)
                                 2: llamando (Verde)
-                                3 y 12: en atención (Celeste)
-                                4 y 13: fin (Omitir)
+                                3, 4 y 12: en atención (Celeste)
+                                13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
                         if(datos[i].pacientes[j].Estado === 2){
-                            pacientes.unshift(<td key={i+"x"+j} className={"align-items-center fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            pacientes.unshift(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             verdes[i] = true;
                         }else{
-                            pacientes.push(<td key={i+"x"+j} className={"align-items-center fs-3 p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
-                            
+                            //pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            if(datos[i].pacientes[j].Estado === 1){
+                                pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            }else{
+                                pacientes.push(<td key={i+"x"+j} className="fondo">{" "}</td>);
+                            }
                         }
                     }else{
                         pacientes.push(<td key={i+"x"+j} className="fondo">{" "}</td>);
@@ -112,7 +117,7 @@ function Screen(props){
                     //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
                     TBlue.unshift(
                         <tr key={datos[i].id +"/"+i}>
-                            <td className="fs-3 p-0 fw-bold mainTable">{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>
                             <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                             {pacientes}
                         </tr>    
@@ -120,7 +125,7 @@ function Screen(props){
                 }else{
                     TBlue.push(
                         <tr key={datos[i].id}>
-                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>
                             <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                             {pacientes}
                         </tr>
@@ -130,7 +135,7 @@ function Screen(props){
 
                 TBlue.push(
                     <tr key={datos[i].id}>
-                        <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].box}</td>
+                        <td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>
                         <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                         {pacientes}
                     </tr>
@@ -155,6 +160,9 @@ function Screen(props){
         "poli":false
     });
 
+    const [datosP,setDatos] = useState([]);
+    const [preDatosP,setPreDatos] = useState([]);
+
     const [anima,setAnima] = useState("");
     const [animaC,setAnimaC] = useState("");
     //const calendar = new Reloj();
@@ -166,6 +174,9 @@ function Screen(props){
         let data = JData.armaJSON(Number(props.dpto));
         
         data.then(datos=>{
+            setPreDatos(datosP);
+            setDatos(datos.Datos);
+            
             setPantalla({
                 nombre:datos.Name,
                 mensaje:datos.Messages.concat([
@@ -181,7 +192,7 @@ function Screen(props){
             });
             setBlue(TablaAzul(datos.Datos));
             setGreen(TablaVerde(datos.Datos));
-            if(blue.length > 12){
+            if(blue.length > 9){
                 setAnimaC("ticker-table-container");
                 setAnima("ticker-table");
                 setBlue2(blue)
@@ -191,6 +202,15 @@ function Screen(props){
                 setBlue2([])
             }
         });
+        console.log(datosP)
+        console.log("\n")
+        console.log(preDatosP);
+        if(datosP != preDatosP){
+            console.log("CAMBIO")
+            
+        }else{
+            console.log("NO HAY CAMBIO")
+        }
     })
 
     
@@ -217,9 +237,9 @@ function Screen(props){
                         <Table bordered className={anima}>
                             <thead className="fs-4 position-sticky z-3">
                                 <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "BOX" : "MODULO"}</th>
-                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "ESPECIALISTA" : "LUGAR"}</th>
-                                    <th className="p-0 border border-1 border-white mainTable" colSpan={Pantalla.poli? 4:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "RECINTO" : "MÓDULO"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable">{"ATENCIÓN"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                 </tr>
                             </thead>
                             <tbody className="z-0">
@@ -261,6 +281,7 @@ function Screen(props){
                     </Table>
                 </div>
             </div>
+            <Outlet/>
         </div>
     )
 }

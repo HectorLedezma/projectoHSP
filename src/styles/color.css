@@ -1,10 +1,22 @@
 .mainTable{
     background-color: #0077a7 !important;
     color: #ffffff !important;
+    font-size: 35px !important;
+}
+
+.mainTableCell{
+    color: #0077a7 !important;
+    background-color: #ffffff !important;
+    font-size: 35px !important;
 }
 
 .fondo{
     background-color: #ffe550 !important;
+    color: #000000 !important;
+}
+
+.fondo2{
+    background-color: #66acb6 !important;
     color: #000000 !important;
 }
 
@@ -15,33 +27,40 @@
 .llamandoPendiente{
     background-color: #049100 !important; /* Regresa al color inicial */
     color: #ffffff !important;
-    font-weight: bold;
+    font-weight: bolder;
+    font-size: 35px;
 }
 
 .espera{
     background-color: #FFB900 !important;
-    font-weight: 500;
+    font-weight: bolder;
+    font-size: 35px;
+
 }
 
 .atendiendo{
     background-color: #00C1CD !important;
-    font-weight: 500;
+    font-weight: bolder;
+    font-size: 35px;
 }
 
 @keyframes changeBackground {
     0% {
         background-color: #FFB900; /* Color inicial */
         color: #000000;
-        font-weight: 500;
+        font-weight: bolder;
+        font-size: 35px;
     }
     50% {
         background-color: #049100; /* Regresa al color inicial */
         color: #ffffff;
-        font-weight: bold;
+        font-weight: bolder;
+        font-size: 35px;
     }
     100% {
         background-color: #FFB900; /* Color inicial */
         color: #000000;
-        font-weight: 500;
+        font-weight: bolder;
+        font-size: 35px;
     }
 }
