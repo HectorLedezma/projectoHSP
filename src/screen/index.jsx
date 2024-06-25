@@ -8,6 +8,7 @@ import tables from "../styles/tables.json";
 //import { Reloj } from "../classes/relog";
 import { useEffect, useState } from "react";
 import { Datos } from "../classes/datos";
+import Carrusel from "../components/carrusel";
 
 /* border border-primary */
 
@@ -37,7 +38,7 @@ function Screen(props){
             try {
                 for(let j = 0; j<datos[i].pacientes.length;j++){
                     if(datos[i].pacientes[j].Estado >= 2){
-                        let estilo = colorState(datos[i].pacientes[j].Estado);
+                        let estilo = datos[i].pacientes[j].Estado === 2? "llamandoPendiente" : colorState(datos[i].pacientes[j].Estado);
                         // style={estilo}
                         if(datos[i].pacientes[j].Estado === 2){
                             res.unshift(
@@ -103,7 +104,7 @@ function Screen(props){
                             
                         }
                     }else{
-                        pacientes.push(<td key={i+"x"+j} >{" "}</td>);
+                        pacientes.push(<td key={i+"x"+j} className="fondo">{" "}</td>);
                     }
                 }
                 
@@ -111,16 +112,16 @@ function Screen(props){
                     //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
                     TBlue.unshift(
                         <tr key={datos[i].id +"/"+i}>
-                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                            <td className="fs-3 p-0 fw-bold mainTable">{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                             {pacientes}
                         </tr>    
                     )    
                 }else{
                     TBlue.push(
                         <tr key={datos[i].id}>
-                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                            <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].box}</td>
+                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                             {pacientes}
                         </tr>
                     );
@@ -129,8 +130,8 @@ function Screen(props){
 
                 TBlue.push(
                     <tr key={datos[i].id}>
-                        <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].box}</td>
-                        <td className="fs-3 p-0 fw-bold" style={tables.TbepBoxEsp}>{datos[i].medico}</td>
+                        <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].box}</td>
+                        <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                         {pacientes}
                     </tr>
                 );
@@ -167,7 +168,15 @@ function Screen(props){
         data.then(datos=>{
             setPantalla({
                 nombre:datos.Name,
-                mensaje:datos.Messages,
+                mensaje:datos.Messages.concat([
+                    {
+                        "idMensaje": -1,
+                        "mensaje": "Recuerde que la atención es según la hora de la cita, NO por orden de llegada",
+                        "estado": 1,
+                        "hora": "00:00:00",
+                        "idPantalla": 0
+                    }
+                ]),
                 poli:datos.poli
             });
             setBlue(TablaAzul(datos.Datos));
@@ -188,17 +197,17 @@ function Screen(props){
     return(
         <div>{/* cuadro de la pantalla */}
             
-            <div className="d-flex justify-content-center sticky-top bg-light z-4">{/* Información piso y reloj */}
-                <Row xl={12} className="header-container d-flex justify-content-around p-3 border border-primary">
-                    <Col xl={3} md={2}><Image src={logoUCEN} className="imagen"/></Col>{/* Logo UCentral */}
-                    <Col className="d-flex align-items-center justify-content-center" xl={6}>
+            <div className="d-flex justify-content-center sticky-top fondo z-4">{/* Información piso y reloj */}
+                <Row xl={12} className="header-container d-flex justify-content-around border border-primary">
+                    <Col xl={3} className="d-flex align-items-center justify-content-center"><Image src={logoUCEN} className="imagen m-0"/></Col>{/* Logo UCentral */}
+                    <Col className="d-flex align-items-center justify-content-center p-3" xl={6}>
                         <Container>
                             <Row><Col><h1 className="fs-1 fw-bold">{Pantalla.nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
                             {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                             <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                         </Container>
                     </Col>
-                    <Col xl={3} md={2}><Image src={logoHSPC}  className="imagen"/></Col>{/* Logo HSPablo */}
+                    <Col xl={3} className=" d-flex align-items-center justify-content-center"><Image src={logoHSPC} className="imagen m-0"/></Col>{/* Logo HSPablo */}
                 </Row>
             </div>
             
@@ -208,9 +217,9 @@ function Screen(props){
                         <Table bordered className={anima}>
                             <thead className="fs-4 position-sticky z-3">
                                 <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{Pantalla.poli? "BOX" : "MODULO"}</th>
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader}>{Pantalla.poli? "ESPECIALISTA" : "LUGAR"}</th>
-                                    <th className="p-0 border border-1 border-white" style={tables.TbepHeader} colSpan={Pantalla.poli? 4:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "BOX" : "MODULO"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "ESPECIALISTA" : "LUGAR"}</th>
+                                    <th className="p-0 border border-1 border-white mainTable" colSpan={Pantalla.poli? 4:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                 </tr>
                             </thead>
                             <tbody className="z-0">
@@ -221,26 +230,24 @@ function Screen(props){
                     </div>
                     
 
-                    <div className="fixed-bottom z-4 bg-light col-9">
+                    <div className="fixed-bottom z-4 fondo col-9">
                         <Row className="m-1">
-                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold"><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
-                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold"><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
+                            <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                         </Row>
-                        <Row>
-                            <div className="bg-warning fw-bold fs-3 ticker-container">
-                                <div className="ticker">
-                                    Recuerde que la atención es según la hora de la cita, NO por orden de llegada
-                                </div>
+                        
+                            <div className="bg-warning fw-bold fs-3" style={{width:"100vw"}}>
+                                <Carrusel items={Pantalla.mensaje} time={5}/>
                             </div>
-                        </Row>
+                        
                     </div>
 
                 </div>
                 
-                <div className="col-3">{/* Paciente X llamado */}
+                <div className="col-3 fondo">{/* Paciente X llamado */}
                     
-                    <Table bordered>
+                    <Table bordered className="p-0">
                         <thead>
                             <tr>
                                 <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Llamando} colSpan={2}>

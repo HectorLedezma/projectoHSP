@@ -1,5 +1,21 @@
+.mainTable{
+    background-color: #0077a7 !important;
+    color: #ffffff !important;
+}
+
+.fondo{
+    background-color: #ffe550 !important;
+    color: #000000 !important;
+}
+
 .llamando{
     animation: changeBackground 1s infinite;
+}
+
+.llamandoPendiente{
+    background-color: #049100 !important; /* Regresa al color inicial */
+    color: #ffffff !important;
+    font-weight: bold;
 }
 
 .espera{

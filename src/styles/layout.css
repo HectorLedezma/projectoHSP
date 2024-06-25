@@ -34,7 +34,7 @@
     position: relative;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
   }
   
   /* Estilo para la tabla */
@@ -59,7 +59,7 @@
     display: block;
     position: absolute;
     width: 100%;
-    animation: ticker-vertical 15s linear infinite;
+    animation: ticker-vertical 20s linear infinite;
   }
   
   /* Estilo para el encabezado */
