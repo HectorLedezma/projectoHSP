@@ -112,12 +112,31 @@ export class ETL{
         let ArrayNHora = [];
         if(hrs !== null){
             let ArrayHora = hrs.split(":");
-            for(let i = 0; i<2;i++){
+            for(let i = 0; i<ArrayHora.length;i++){
                 ArrayNHora.push(Number(ArrayHora[i]));
             }
         }
         
         return ArrayNHora;
+    }
+
+    getHoraValue(ArrayHora){
+        let value = 0
+        //60⁰=1
+        //60¹=60
+        //60²=360
+        //360:60:1
+        //[01:00:00]
+        //[0, 1, 2]
+        //[]
+        if(ArrayHora.length > 0){
+            let Tindex = ArrayHora.length-1;//2
+            for(let i = 0; i<ArrayHora.length;i++){
+                value = value+(ArrayHora[i]*Math.pow(60,Tindex))
+                Tindex--;
+            }
+        }
+        return value;
     }
 
     estateSort(p){
@@ -136,7 +155,7 @@ export class ETL{
         for(let i = 1; i < p.length;i++){
             let iaux = i;
             while(true){
-                if(((p[iaux].Hora[0]*60)+p[iaux].Hora[1]) < ((p[iaux-1].Hora[0]*60)+p[iaux-1].Hora[1])){
+                if((this.getHoraValue(p[iaux].Hora)) < (this.getHoraValue(p[iaux-1].Hora))){
                     let aux = p[iaux];
                     p[iaux] = p[iaux-1];
                     p[iaux-1] = aux;
@@ -158,6 +177,7 @@ export class ETL{
             //caso 2 "Trauma1"
             //caso 3 "Trauma1 (2)"
             //caso 4 "box5"
+            //caso 5 "Box 5"
         
         let SalaArray = box.split(" ");
         
@@ -166,8 +186,9 @@ export class ETL{
         //  caso 2 ["Trauma1"]
         //  caso 3 ["Trauma1", "(2)"]
         //  caso 4 ["box5"]
+        //  caso 5 ["Box", "5"]
 
-        const noBOX = (txt) =>{
+        /*const noBOX = (txt) =>{
             // Usar una expresión regular para capturar el texto y el número
             const match = txt.match(/^([a-zA-Z]+)(\d+)$/);
             // Si hay un match, retornar un arreglo con el texto y el número
@@ -177,19 +198,20 @@ export class ETL{
                 // Si no coincide con el patrón esperado, devolver null o un mensaje de error
                 return [txt];
             }
-        }
-        if(SalaArray.length === 1){
-            SalaArray = noBOX(SalaArray[0]);
-        }
+        }*/
+        //if(SalaArray.length === 1){
+        //    SalaArray = noBOX(SalaArray[0]);
+        //}
 
-        let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "box")&&(n !== "Box")&&(n !== "de")&&(n !== "Ventanilla")))
+        let NoSala = SalaArray.filter(n=>((n !== "sala")&&(n !== "Sala")&&(n !== "de")&&(n !== "Ventanilla")))
         //sin "sala", "box" ni conectores
         //  caso 1 ["proc.", "trauma"]
         //  caso 2 ["Trauma1"]
         //  caso 3 ["Trauma1", "(2)"]
         //  caso 4 ["box5"]
+        //  caso 5 ["Box", "5"]
         
-        const busca = (txt) =>{
+        /*const busca = (txt) =>{
             let newTxt = "";
             let txtArray = txt.split("");
             
@@ -201,16 +223,16 @@ export class ETL{
                 }
             }
             return newTxt;
-        }
+        }*/
 
-        let NoChar = busca(NoSala.join(""));
+        //let NoChar = busca(NoSala.join(""));
 
         let nombre = "";
-        for(let i = 0; i<NoChar.length;i++){//unir elementos de arreglo para formar un único String
+        for(let i = 0; i<NoSala.length;i++){//unir elementos de arreglo para formar un único String
             if(i===0){
-                nombre = nombre+NoChar[i].charAt(0).toUpperCase()+NoChar[i].substring(1).toLowerCase();
+                nombre = nombre+" "+NoSala[i].charAt(0).toUpperCase()+NoSala[i].substring(1).toLowerCase();
             }else{
-                nombre = nombre+" "+NoChar[i];
+                nombre = nombre+" "+NoSala[i];
             }
         }
 
@@ -218,7 +240,7 @@ export class ETL{
         //  caso 1 "proc."
         //  caso 2 "1"
         //  caso 3 "1"
-        return NoChar
+        return nombre
     }
 
     limpiaBox2(box){
@@ -247,6 +269,7 @@ export class ETL{
                     
                 }
             }
+            final = "Box "+final;
         }else{
             final = this.abreviaComplex(box);
         }
@@ -254,6 +277,51 @@ export class ETL{
         return final
     }
 
+    titulo(tit){
+        function Roma(num) {
+            // Mapa de números y sus correspondientes símbolos romanos
+            const valoresRomanos = [
+                { valor: 1000, simbolo: 'M' },
+                { valor: 900, simbolo: 'CM' },
+                { valor: 500, simbolo: 'D' },
+                { valor: 400, simbolo: 'CD' },
+                { valor: 100, simbolo: 'C' },
+                { valor: 90, simbolo: 'XC' },
+                { valor: 50, simbolo: 'L' },
+                { valor: 40, simbolo: 'XL' },
+                { valor: 10, simbolo: 'X' },
+                { valor: 9, simbolo: 'IX' },
+                { valor: 5, simbolo: 'V' },
+                { valor: 4, simbolo: 'IV' },
+                { valor: 1, simbolo: 'I' }
+            ];
+            
+            // Variable para almacenar el número romano resultante
+            let resultado = '';
+            
+            // Iterar sobre los valores romanos
+            for (const { valor, simbolo } of valoresRomanos) {
+                // Mientras el número sea mayor o igual al valor actual
+                while (num >= valor) {
+                    resultado += simbolo;  // Añadir el símbolo romano al resultado
+                    num -= valor;  // Reducir el número por el valor correspondiente
+                }
+            }
+            
+            return resultado;  // Devolver el número romano resultante
+        }
+        let tits = tit.split(" ");
+        let result = ""
+        if(tits.includes("Torre")){
+            let torre = Roma(Number(tits[1]));
+            tits.splice(1,1,torre);
+            tits.map((t)=>result = result+t+" ")
+        }else{
+            result = tit;
+        }
+
+        return result
+    }
 
     ticketSort(tickets){
         
