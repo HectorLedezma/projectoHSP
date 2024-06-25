@@ -277,6 +277,49 @@ export class ETL{
         return final
     }
 
+    limpiaOnlyBox(box){
+        let result = box;
+        let esBox = false;
+        const numbers = ["1","2","3","4","5","6","7","8","9","0"];
+        let arrayBox = box.split(" ");
+
+        esBox = arrayBox.includes("box") || arrayBox.includes("Box") || arrayBox.includes("BOX")
+
+        if(!esBox){
+            result = this.limpiaOnlyProcess(result)
+        }else{
+            result = box.toUpperCase();
+        }
+        return result;
+    }
+
+    limpiaOnlyProcess(box){
+        let result = box;
+        const numbers = ["1","2","3","4","5","6","7","8","9","0"];
+        let esProcess = false;
+        let arrayBox = box.split(" ");
+        esProcess = arrayBox.includes("Procedimientos") || 
+                    arrayBox.includes("Procedimientos".toUpperCase()) || 
+                    arrayBox.includes("Procedimientos".toLowerCase()) || 
+                    arrayBox.includes("Procedimiento") || 
+                    arrayBox.includes("Procedimiento".toUpperCase()) || 
+                    arrayBox.includes("Procedimiento".toLowerCase());
+        if(esProcess){
+            for(let i = 0; i<arrayBox.length;i++){
+                if(arrayBox[i].toUpperCase() === "PROCEDIMIENTOS" || arrayBox[i].toUpperCase() === "PROCEDIMIENTO"){
+                    arrayBox[i] = "PROCE "
+                }else if(arrayBox[i].toUpperCase() === "SALA"){
+                    arrayBox[i] = "S. "
+                }else if(!numbers.includes(arrayBox[i])){
+                    arrayBox[i] = ""
+                }
+            }
+            result = "";
+            arrayBox.map(l=>result=result+l);
+        }
+        return result.toUpperCase()
+    }
+
     titulo(tit){
         function Roma(num) {
             // Mapa de números y sus correspondientes símbolos romanos
