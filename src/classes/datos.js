@@ -156,7 +156,7 @@ export class Datos{
             if(!doctors.includes(datos[i].name)){//pregunta si el nombre del box no fue considerado
                 doctors.push(datos[i].name);
                 let subPatient = [];//arreglo de tickets a nombre de un mismo box
-                console.log(datos[i]);
+                //console.log(datos[i]);
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
                     //para capturar todos los tickets que correspondan al mismo medico
                     if(datos[i].name === datos[j].name){
@@ -176,8 +176,8 @@ export class Datos{
                 })
             }
         }
-        const respuesta = {"poli":MyScreen.poli,"Name":MyScreen.nombre,"Datos":finalJSON,"Messages":MyScreen.mensaje}
-        console.log("\n");
+        const respuesta = {"poli":MyScreen.poli,"Name":this.etl.titulo(MyScreen.nombre),"Datos":finalJSON,"Messages":MyScreen.mensaje}
+        //console.log("\n");
         return respuesta
     }
     
