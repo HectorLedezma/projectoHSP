@@ -57,7 +57,7 @@ export class ETL{
            }
             //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
             try {
-                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),6):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
+                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),7):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
             } catch (error) {
                //console.log("ecepcion")
                 newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
@@ -288,40 +288,61 @@ export class ETL{
         let esBox = false;
         let arrayBox = box.split(" ");
 
-        esBox = arrayBox.includes("box") || arrayBox.includes("Box") || arrayBox.includes("BOX")
+        
+        
+        esBox = box.includes("box") || box.includes("Box") || box.includes("BOX")
 
         if(!esBox){
             result = this.limpiaOnlyProcess(result)
         }else{
-            let nBox = ""
-            arrayBox.map((b)=>{
-                if(Number(b)+"" !== "NaN"){
-                    nBox = b;
+            const boxLetter = ["B","O","X","0","0"]
+            const boxSplit = box.split("");
+            let racha = 0;
+            
+            let nombre = "";
+            let fin = false;
+            for(let l = 0; l<boxLetter.length;l++){
+                //console.log("Racha = "+racha)
+                for(let i = racha; i<boxSplit.length;i++){
+                    if(boxSplit[i] === "("){
+                        fin = true;
+                        break;
+                    }
+                    if((boxSplit[i].toUpperCase() === boxLetter[l] || Number(boxSplit[i])+"" !== "NaN") && boxSplit[i] !== " "){
+                        //console.log(i+" = "+boxSplit[i].toUpperCase())
+                        racha = i+1;
+                        nombre = nombre+(l===2?boxSplit[i].toUpperCase()+" ":boxSplit[i].toUpperCase())
+                        break;
+                    }
+                    
                 }
-            });
-            result = "BOX "+nBox;
+                if(fin || racha === boxSplit.length){
+                    break;
+                }
+            }
+            result = nombre;
         }
         return result;
     }
 
     limpiaOnlyProcess(box){
         let result = box;
-        const numbers = ["1","2","3","4","5","6","7","8","9","0"];
-        let esProcess = false;
-        let arrayBox = box.split(" ");
-        esProcess = arrayBox.includes("Procedimientos") || 
-                    arrayBox.includes("Procedimientos".toUpperCase()) || 
-                    arrayBox.includes("Procedimientos".toLowerCase()) || 
-                    arrayBox.includes("Procedimiento") || 
-                    arrayBox.includes("Procedimiento".toUpperCase()) || 
-                    arrayBox.includes("Procedimiento".toLowerCase());
+        const esProcess = 
+            box.includes("Proce") || 
+            box.includes("Proce".toUpperCase()) || 
+            box.includes("Proce".toLowerCase())
         if(esProcess){
+            const arrayBox = box.split("");
             let nProc = "";
-            arrayBox.map((b)=>{
-                if(Number(b)+"" !== "NaN"){
-                    nProc = b;
+            for(let i = 0; i<arrayBox.length;i++){
+                if(arrayBox[i] === "("){
+                    break;
                 }
-            })
+
+                if(Number(arrayBox[i])+"" !== "NaN" && arrayBox[i] !== " "){
+                    nProc = nProc+arrayBox[i];
+                }
+            }
             result = "S. PROCE "+nProc;
         }
         return result.toUpperCase()
