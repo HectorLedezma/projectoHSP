@@ -120,10 +120,10 @@ export class Datos{
                 let doctor = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15))
                 if(nombreSala===""){
                     //console.log(this.modtick.tickets[i])
-                    nombreSala = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
+                    nombreSala = ""//(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
 
                 }else{
-                    nombreSala = this.etl.limpiaBox(nombreSala)
+                    nombreSala = this.etl.limpiaOnlyBox(nombreSala)
                 }
                 let newDato = {
                     "id":this.modtick.tickets[i].id, 
@@ -156,13 +156,13 @@ export class Datos{
         let finalJSON = [];
         //console.log(datos);
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
-            if(!doctors.includes(datos[i].name)){//pregunta si el nombre del box no fue considerado
-                doctors.push(datos[i].name);
+            if(!doctors.includes(datos[i].dr)){//pregunta si el nombre del box no fue considerado
+                doctors.push(datos[i].dr);
                 let subPatient = [];//arreglo de tickets a nombre de un mismo box
                 //console.log(datos[i]);
                 for(let j = 0;j<datos.length;j++){//recorre el arreglo de datos proporcionado otra vez
                     //para capturar todos los tickets que correspondan al mismo medico
-                    if(datos[i].name === datos[j].name){
+                    if(datos[i].dr === datos[j].dr){
                         subPatient.push({
                             "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,
