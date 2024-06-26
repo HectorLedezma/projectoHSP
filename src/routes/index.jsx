@@ -13,7 +13,7 @@ function ProfilePage() {
 function Rutas(){
     return(
         <Routes>
-            <Route path="/pantallas" element={<MainMenu/>}/>
+            <Route path="/" element={<MainMenu/>}/>
             <Route path="/piso">
                 <Route path=":dpto" element={<ProfilePage/>}/>
             </Route> {/* 👈 Renders at /app/ */}
