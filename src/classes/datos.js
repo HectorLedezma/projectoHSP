@@ -117,16 +117,18 @@ export class Datos{
             // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13 this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].idDepartment === idd &&
             if((this.modtick.tickets[i].estado !== 13)){
                 let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
+                let doctor = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15))
                 if(nombreSala===""){
                     //console.log(this.modtick.tickets[i])
-                    nombreSala = this.etl.limpiaBox2(this.modtick.tickets[i].nameModule);
+                    nombreSala = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
+
                 }else{
                     nombreSala = this.etl.limpiaBox(nombreSala)
                 }
                 let newDato = {
                     "id":this.modtick.tickets[i].id, 
                     "name":(nombreSala),//modulo
-                    "dr":(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15)),
+                    "dr":doctor,
                     "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion

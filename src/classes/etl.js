@@ -286,7 +286,6 @@ export class ETL{
     limpiaOnlyBox(box){
         let result = box;
         let esBox = false;
-        const numbers = ["1","2","3","4","5","6","7","8","9","0"];
         let arrayBox = box.split(" ");
 
         esBox = arrayBox.includes("box") || arrayBox.includes("Box") || arrayBox.includes("BOX")
@@ -294,7 +293,13 @@ export class ETL{
         if(!esBox){
             result = this.limpiaOnlyProcess(result)
         }else{
-            result = box.toUpperCase();
+            let nBox = ""
+            arrayBox.map((b)=>{
+                if(Number(b)+"" !== "NaN"){
+                    nBox = b;
+                }
+            });
+            result = "BOX "+nBox;
         }
         return result;
     }
@@ -311,17 +316,13 @@ export class ETL{
                     arrayBox.includes("Procedimiento".toUpperCase()) || 
                     arrayBox.includes("Procedimiento".toLowerCase());
         if(esProcess){
-            for(let i = 0; i<arrayBox.length;i++){
-                if(arrayBox[i].toUpperCase() === "PROCEDIMIENTOS" || arrayBox[i].toUpperCase() === "PROCEDIMIENTO"){
-                    arrayBox[i] = "PROCE "
-                }else if(arrayBox[i].toUpperCase() === "SALA"){
-                    arrayBox[i] = "S. "
-                }else if(!numbers.includes(arrayBox[i])){
-                    arrayBox[i] = ""
+            let nProc = "";
+            arrayBox.map((b)=>{
+                if(Number(b)+"" !== "NaN"){
+                    nProc = b;
                 }
-            }
-            result = "";
-            arrayBox.map(l=>result=result+l);
+            })
+            result = "S. PROCE "+nProc;
         }
         return result.toUpperCase()
     }

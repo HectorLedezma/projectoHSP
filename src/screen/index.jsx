@@ -97,7 +97,7 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
-                        if(datos[i].pacientes[j].Estado === 2){
+                        if(datos[i].pacientes[j].Estado <= 2){
                             pacientes.unshift(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             verdes[i] = true;
                         }else{
@@ -205,8 +205,8 @@ function Screen(props){
         console.log(datosP)
         console.log("\n")
         console.log(preDatosP);
-        if(datosP != preDatosP){
-            console.log("CAMBIO")
+        if(JSON.stringify(datosP) !== JSON.stringify(preDatosP)){
+            console.log("CAMBIO");
             
         }else{
             console.log("NO HAY CAMBIO")

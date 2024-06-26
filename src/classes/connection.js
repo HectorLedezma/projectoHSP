@@ -13,7 +13,7 @@ export class Connection {
 
     async getModules(dpto){
         try {
-            const res = await axios.post(process.env.REACT_APP_MODULES_TEST+dpto);
+            const res = await axios.post(process.env.REACT_APP_MODULES_REAL+dpto);
             //console.log("Conexión con el servidor establecida")
             await this.esperar(1000);
             this.blog = res.data;
@@ -28,7 +28,7 @@ export class Connection {
     async getPantalla(){
         try {
             await this.esperar(1000);
-            const res = await axios.post(process.env.REACT_APP_SCREENS_TEST);
+            const res = await axios.post(process.env.REACT_APP_SCREENS_REAL);
             //console.log("Conexión con el servidor establecida")
             this.blog = res.data;
         } catch (error) {
