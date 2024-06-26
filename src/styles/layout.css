@@ -59,7 +59,7 @@
     display: block;
     position: absolute;
     width: 100%;
-    animation: ticker-vertical 20s linear infinite;
+    animation: ticker-vertical 50s linear infinite;
   }
   
   /* Estilo para el encabezado */

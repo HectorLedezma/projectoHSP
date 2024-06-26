@@ -46,7 +46,7 @@
 
 @keyframes changeBackground {
     0% {
-        background-color: #FFB900; /* Color inicial */
+        background-color: #ffffff; /* Color inicial */
         color: #000000;
         font-weight: bolder;
         font-size: 35px;
@@ -58,7 +58,7 @@
         font-size: 35px;
     }
     100% {
-        background-color: #FFB900; /* Color inicial */
+        background-color: #ffffff; /* Color inicial */
         color: #000000;
         font-weight: bolder;
         font-size: 35px;
