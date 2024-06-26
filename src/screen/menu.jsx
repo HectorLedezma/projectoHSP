@@ -32,7 +32,6 @@ const MainMenu = () =>{
         JData.getScreens().then(data=>{
             setPantallas(data);
         });
-        console.log(pantallas)
     })
     return(
         <div>
