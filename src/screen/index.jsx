@@ -97,45 +97,51 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
-                        if(datos[i].pacientes[j].Estado <= 2){
-                            pacientes.unshift(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                        if(datos[i].pacientes[j].Estado === 2){
+                            pacientes.unshift(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             verdes[i] = true;
                         }else{
                             //pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             if(datos[i].pacientes[j].Estado === 1){
-                                pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                                pacientes.push(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             }else{
-                                pacientes.push(<td key={i+"x"+j} className="fondo">{" "}</td>);
+                                pacientes.push(<td ready={false} key={i+"x"+j} className="fondo">{" "}</td>);
                             }
                         }
                     }else{
-                        pacientes.push(<td key={i+"x"+j} className="fondo">{" "}</td>);
+                        pacientes.push(<td ready={false} key={i+"x"+j} className="fondo">{" "}</td>);
                     }
                 }
-                
-                if(verdes[i]){
-                    //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
-                    TBlue.unshift(
-                        <tr key={datos[i].id +"/"+i}>
-                            <td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>
-                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
-                            {pacientes}
-                        </tr>    
-                    )    
-                }else{
-                    TBlue.push(
-                        <tr key={datos[i].id}>
-                            <td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>
-                            <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
-                            {pacientes}
-                        </tr>
-                    );
+
+                let readies = false;
+                pacientes.map((p)=>{
+                    readies = readies || p.props.ready;
+                })
+                if(readies){
+                    if(verdes[i]){
+                        //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
+                        TBlue.unshift(
+                            <tr key={datos[i].id +"/"+i}>
+                                {/*<td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>*/}
+                                <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
+                                {pacientes}
+                            </tr>    
+                        )    
+                    }else{
+                        TBlue.push(
+                            <tr key={datos[i].id}>
+                                {/*<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>*/}
+                                <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
+                                {pacientes}
+                            </tr>
+                        );
+                    }
                 }
             } catch (error) {
 
                 TBlue.push(
                     <tr key={datos[i].id}>
-                        <td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>
+                        {/*<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>*/}
                         <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                         {pacientes}
                     </tr>
@@ -202,14 +208,9 @@ function Screen(props){
                 setBlue2([])
             }
         });
-        console.log(datosP)
-        console.log("\n")
-        console.log(preDatosP);
         if(JSON.stringify(datosP) !== JSON.stringify(preDatosP)){
             console.log("CAMBIO");
             
-        }else{
-            console.log("NO HAY CAMBIO")
         }
     })
 
@@ -237,7 +238,7 @@ function Screen(props){
                         <Table bordered className={anima}>
                             <thead className="fs-4 position-sticky z-3">
                                 <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                    <th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "RECINTO" : "MÓDULO"}</th>
+                                    {/*<th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "RECINTO" : "MÓDULO"}</th>*/}
                                     <th className="p-0 border border-1 border-white mainTable">{"ATENCIÓN"}</th>
                                     <th className="p-0 border border-1 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                 </tr>
