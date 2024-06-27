@@ -2,14 +2,16 @@ import { Image, Container, Row, Col, Table } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logoHSPC from "../images/hspc.png";
 import logoUCEN from "../images/ucen.png";
+import bell from "../sfx/Bell.mp3"
 import "../styles/layout.css";
 import "../styles/color.css";
 import tables from "../styles/tables.json";
 //import { Reloj } from "../classes/relog";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Datos } from "../classes/datos";
 import Carrusel from "../components/carrusel";
 import { Outlet } from "react-router-dom";
+//import { error } from "console";
 
 /* border border-primary */
 
@@ -35,6 +37,7 @@ function Screen(props){
 
     const TablaVerde = (datos) =>{
         let res = []
+        console.log("cargando");
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             try {
                 for(let j = 0; j<datos[i].pacientes.length;j++){
@@ -44,22 +47,23 @@ function Screen(props){
                         if(datos[i].pacientes[j].Estado === 2){
                             res.unshift(
                                 <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={" p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                    <td className={"p-0 align-middle "+estilo}>{datos[i].pacientes[j].Modulo}</td>
+                                    <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )    
                         }else{
+                            
                             res.push(
                                 <tr key={datos[i].pacientes[j].Nombre} state={datos[i].pacientes[j].Estado}>
-                                    <td className={" p-0 "+estilo}>{datos[i].box}</td>
-                                    <td className={" p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>
+                                    <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Modulo}</td>
+                                    <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )
                         }
                     }
                 }    
             } catch (error) {
-                console.log(datos)
+                console.log(error)
             }
         }
         return res
@@ -83,7 +87,7 @@ function Screen(props){
                 });*/
                 verdes.push(false);
                 
-                const lim = 3
+                const lim = (Pantalla.poli? 3:2);
                 //let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
                     //j-1 => 2 -> [0, 1, 2] // lim = 4 -> [0, 1, 2, 3]
@@ -98,12 +102,18 @@ function Screen(props){
                                 8: no llegó (Omitir)
                         */
                         if(datos[i].pacientes[j].Estado === 2){
-                            pacientes.unshift(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                            pacientes.unshift(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
+                                datos[i].pacientes[j].Nombre}<br/>
+                                {datos[i].pacientes[j].Modulo}
+                            </td>);
                             verdes[i] = true;
                         }else{
                             //pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             if(datos[i].pacientes[j].Estado === 1){
-                                pacientes.push(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
+                                pacientes.push(<td ready={true} key={i+"x"+j} className={"align-items-center align-middle p-0 "+estilo}>
+                                    {datos[i].pacientes[j].Nombre}<br/>
+                                    {datos[i].pacientes[j].Modulo}
+                                </td>);
                             }else{
                                 pacientes.push(<td ready={false} key={i+"x"+j} className="fondo">{" "}</td>);
                             }
@@ -123,7 +133,7 @@ function Screen(props){
                         TBlue.unshift(
                             <tr key={datos[i].id +"/"+i}>
                                 {/*<td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>*/}
-                                <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
+                                <td className="align-middle fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                                 {pacientes}
                             </tr>    
                         )    
@@ -131,7 +141,7 @@ function Screen(props){
                         TBlue.push(
                             <tr key={datos[i].id}>
                                 {/*<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>*/}
-                                <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
+                                <td className="align-middle fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                                 {pacientes}
                             </tr>
                         );
@@ -174,43 +184,55 @@ function Screen(props){
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     //const [fecha, setFecha] = useState(calendar.getFecha());
-
+    const [found,setFound] = useState(true)
+    //const sound = new Audio(bell);
+    //const audioRef = useRef();
     useEffect(()=>{
         
-        let data = JData.armaJSON(Number(props.dpto));
-        
-        data.then(datos=>{
-            setPreDatos(datosP);
-            setDatos(datos.Datos);
+        if(found){
+            let data = JData.armaJSON(Number(props.dpto));
             
-            setPantalla({
-                nombre:datos.Name,
-                mensaje:datos.Messages.concat([
-                    {
-                        "idMensaje": -1,
-                        "mensaje": "Recuerde que la atención es según la hora de la cita, NO por orden de llegada",
-                        "estado": 1,
-                        "hora": "00:00:00",
-                        "idPantalla": 0
-                    }
-                ]),
-                poli:datos.poli
+            data.then(datos=>{
+                setPreDatos(datosP);
+                setDatos(datos.Datos);
+                
+                setPantalla({
+                    nombre:datos.Name,
+                    mensaje:(datos.poli?datos.Messages.concat([
+                        {
+                            "idMensaje": -1,
+                            "mensaje": "Recuerde que la atención es según la hora de la cita, NO por orden de llegada",
+                            "estado": 1,
+                            "hora": "00:00:00",
+                            "idPantalla": 0
+                        }
+                    ]):datos.Messages),
+                    poli:datos.poli
+                });
+                setBlue(TablaAzul(datos.Datos));
+                console.log(datos.Datos);
+                setGreen(TablaVerde(datos.Datos));
+                if(blue.length > 9){
+                    setAnimaC("ticker-table-container");
+                    setAnima("ticker-table");
+                    setBlue2(blue)
+                }else{
+                    setAnimaC("");
+                    setAnima("");
+                    setBlue2([])
+                }
+                setFound(true);
+
             });
-            setBlue(TablaAzul(datos.Datos));
-            setGreen(TablaVerde(datos.Datos));
-            if(blue.length > 9){
-                setAnimaC("ticker-table-container");
-                setAnima("ticker-table");
-                setBlue2(blue)
-            }else{
-                setAnimaC("");
-                setAnima("");
-                setBlue2([])
-            }
-        });
-        if(JSON.stringify(datosP) !== JSON.stringify(preDatosP)){
-            console.log("CAMBIO");
+
             
+            console.log("FIN")
+        }
+        
+        if(JSON.stringify(datosP) !== JSON.stringify(preDatosP)){
+            //console.log("CAMBIO");
+            //audioRef.current.play();
+            //sound.play();
         }
     })
 
@@ -275,6 +297,14 @@ function Screen(props){
                                     Últimos llamados
                                 </th>
                             </tr>
+                            {/*<tr>
+                                <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Llamando}>
+                                    MODULO
+                                </th>
+                                <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Llamando}>
+                                    NUMERO
+                                </th>
+                            </tr>*/}
                         </thead>
                         <tbody>
                             {green}
@@ -282,6 +312,9 @@ function Screen(props){
                     </Table>
                 </div>
             </div>
+            {/*<audio ref={audioRef}>
+                <source src={bell} type="audio/mpeg"/>
+            </audio>*/}
             <Outlet/>
         </div>
     )

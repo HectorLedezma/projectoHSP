@@ -77,9 +77,9 @@ export class Datos{
     }
 
     async armaJSON(idd){
-
+        console.log("await armaJSON(idd)");
         this.modtick = await this.con.getModules(idd);
-        //this.modtick.tickets.map(t=>t.nameModule === "Oficina Dermatologia"? console.log(t): "");
+        //this.modtick.tickets.map(t=>t.nameModule === "Oficina Dermatologia"?//console.log(t): "");
         this.screens = await this.con.getPantalla();
         //console.log(this.modtick);
         // esta pantalla
@@ -102,32 +102,43 @@ export class Datos{
                 "dirIP": "",
                 "disponible": 0//llamando
             };
-            
+           //console.log(idMod);
             for(let j = 0; j < this.modtick.modulos.length;j++){
-                //console.log("   "+modXdpto[j].idModule);
-                if(idMod === this.modtick.modulos[j].idModule){
+                //console.log(Number(idMod) +" | "+ this.modtick.modulos[j].idModule);
+                if(Number(idMod) === this.modtick.modulos[j].idModule){
+
                     res = this.modtick.modulos[j];
+                   //console.log(res);
+                    break
                 }
             }
-            return res
+            
+            return res;
         }
         
         //filtrar tickets por dpto.
+        //console.log()
+        //console.log(this.modtick.tickets)
+
         for(let i = 0; i<this.modtick.tickets.length;i++){
             // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13 this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].idDepartment === idd &&
             if((this.modtick.tickets[i].estado !== 13)){
-                let nombreSala = getModul(this.modtick.tickets[i].idModule).nameModule;
+               //console.log(this.modtick.tickets[i]);
+                let nombreSala = getModul(this.modtick.tickets[i].idModule);
+                console.log("nombreSala = "+nombreSala.nameModule);
                 let doctor = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15))
-                if(nombreSala===""){
+                if(nombreSala.nameModule === ""){
+
                     //console.log(this.modtick.tickets[i])
-                    nombreSala = ""//(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
+                    nombreSala.nameModule = "En espera"//this.modtick.tickets[i].nameModule//(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
 
                 }else{
-                    nombreSala = this.etl.limpiaOnlyBox(nombreSala)
+                    nombreSala.nameModule = this.etl.limpiaOnlyBox(nombreSala.nameModule)
                 }
+               //console.log(nombreSala);
                 let newDato = {
                     "id":this.modtick.tickets[i].id, 
-                    "name":(nombreSala),//modulo
+                    "name":(nombreSala.nameModule),//modulo
                     "dr":doctor,
                     "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
@@ -164,6 +175,7 @@ export class Datos{
                     //para capturar todos los tickets que correspondan al mismo medico
                     if(datos[i].dr === datos[j].dr){
                         subPatient.push({
+                            "Modulo":datos[j].name,
                             "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,
                             "Hora":this.etl.getHora(datos[j].hora)
@@ -179,6 +191,7 @@ export class Datos{
                 })
             }
         }
+        console.log(doctors);
         const respuesta = {"poli":MyScreen.poli,"Name":this.etl.titulo(MyScreen.nombre),"Datos":finalJSON,"Messages":MyScreen.mensaje}
         
         return respuesta

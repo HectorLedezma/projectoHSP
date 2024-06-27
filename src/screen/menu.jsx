@@ -16,7 +16,7 @@ const MainMenu = () =>{
         let list = [];
         pantallas.map((p)=>
             list.push(
-                <tr>
+                <tr key={p.pantalla.idPantalla}>
                     <td className="border border-dark">{etl.titulo(p.pantalla.nombre)+(p.pantalla.policlinico?" (Policlínico)":"")}</td>
                     <td className="border border-dark">{<Button onClick={ev=>{
                         ev.preventDefault();
@@ -28,10 +28,16 @@ const MainMenu = () =>{
         return list;
     }
 
+    const [founded,setFound] = useState(false);
+
     useEffect(()=>{
-        JData.getScreens().then(data=>{
-            setPantallas(data);
-        });
+        if(!founded){
+            JData.getScreens().then(data=>{
+                setPantallas(data);
+            });
+            setFound(true);
+        }
+        
     })
     return(
         <div>

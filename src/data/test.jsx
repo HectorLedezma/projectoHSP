@@ -10,11 +10,12 @@ function Test(args) {
 
     return (
         <div>
-            <input ref={input} placeholder='Texto' onChange={ev=>{
+            <input ref={input} placeholder='Texto' />
+            <Button onClick={ev=>{
                 ev.preventDefault();
                 setInput(input.current.value);
                 setResult(etl.limpiaOnlyBox(input.current.value));
-            }}/>
+            }}>Ver</Button>
             <h1>{inputT}</h1>
             <h1>{result}</h1>
 
