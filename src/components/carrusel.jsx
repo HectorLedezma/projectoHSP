@@ -47,6 +47,7 @@ function Carrusel(args) {
         <Carousel
         activeIndex={activeIndex}
         next={next}
+        previous={next}
         >
         {slides} 
         </Carousel>

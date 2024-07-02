@@ -55,11 +55,11 @@
 
   
   /* Estilo para el cuerpo de la tabla */
-  .ticker-table tbody {
+  .ticker-table TBody {
     display: block;
     position: absolute;
     width: 100%;
-    animation: ticker-vertical 50s linear infinite;
+    /*animation: ticker-vertical 50s linear infinite;*/
   }
   
   /* Estilo para el encabezado */
@@ -72,7 +72,7 @@
   }
   
   /* Estilo para cada fila */
-  .ticker-table tbody tr {
+  .ticker-table TBody tr {
     display: table;
     width: 100%;
     table-layout: fixed; /* Mantiene el ancho de columna uniforme */

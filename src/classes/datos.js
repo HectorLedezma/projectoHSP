@@ -77,7 +77,7 @@ export class Datos{
     }
 
     async armaJSON(idd){
-        console.log("await armaJSON(idd)");
+        //console.log("await armaJSON(idd)");
         this.modtick = await this.con.getModules(idd);
         //this.modtick.tickets.map(t=>t.nameModule === "Oficina Dermatologia"?//console.log(t): "");
         this.screens = await this.con.getPantalla();
@@ -122,10 +122,10 @@ export class Datos{
 
         for(let i = 0; i<this.modtick.tickets.length;i++){
             // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13 this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].idDepartment === idd &&
-            if((this.modtick.tickets[i].estado !== 13)){
+            if((this.modtick.tickets[i].estado !== 13) /*&& (this.modtick.tickets[i].estado !== 4)*/){
                //console.log(this.modtick.tickets[i]);
                 let nombreSala = getModul(this.modtick.tickets[i].idModule);
-                console.log("nombreSala = "+nombreSala.nameModule);
+                //console.log("nombreSala = "+nombreSala.nameModule);
                 let doctor = (this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15))
                 if(nombreSala.nameModule === ""){
 
@@ -191,7 +191,7 @@ export class Datos{
                 })
             }
         }
-        console.log(doctors);
+       //console.log(doctors);
         const respuesta = {"poli":MyScreen.poli,"Name":this.etl.titulo(MyScreen.nombre),"Datos":finalJSON,"Messages":MyScreen.mensaje}
         
         return respuesta

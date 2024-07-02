@@ -2,7 +2,7 @@ import { Image, Container, Row, Col, Table } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logoHSPC from "../images/hspc.png";
 import logoUCEN from "../images/ucen.png";
-import bell from "../sfx/Bell.mp3"
+//import bell from "../sfx/Bell.mp3"
 import "../styles/layout.css";
 import "../styles/color.css";
 import tables from "../styles/tables.json";
@@ -36,26 +36,37 @@ function Screen(props){
     }
 
     const TablaVerde = (datos) =>{
-        let res = []
-        console.log("cargando");
+        let res = [];
+        let sto =[];
+        let st2 =[];
+       //console.log("cargando");
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             try {
                 for(let j = 0; j<datos[i].pacientes.length;j++){
-                    if(datos[i].pacientes[j].Estado >= 2){
+                    if(datos[i].pacientes[j].Estado >= 2 && datos[i].pacientes[j].Modulo.length < 11){
                         let estilo = datos[i].pacientes[j].Estado === 2? "llamandoPendiente" : colorState(datos[i].pacientes[j].Estado);
                         // style={estilo}
                         if(datos[i].pacientes[j].Estado === 2){
-                            res.unshift(
+                            st2.unshift(
                                 <tr key={datos[i].pacientes[j].Nombre}>
-                                    <td className={"p-0 align-middle "+estilo}>{datos[i].pacientes[j].Modulo}</td>
+                                    <td className={"p-0 align-middle "+estilo}>
+                                    {
+                                        datos[i].pacientes[j].Modulo
+                                    }<br/>
+                                    {datos[i].medico}
+                                    </td>
                                     <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )    
                         }else{
-                            
-                            res.push(
+                            sto.unshift(
                                 <tr key={datos[i].pacientes[j].Nombre} state={datos[i].pacientes[j].Estado}>
-                                    <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Modulo}</td>
+                                    <td className={" p-0 align-middle "+estilo}>
+                                    {
+                                        datos[i].pacientes[j].Modulo
+                                    }<br/>
+                                    {datos[i].medico}
+                                    </td>
                                     <td className={" p-0 align-middle "+estilo}>{datos[i].pacientes[j].Nombre}</td>
                                 </tr>
                             )
@@ -63,9 +74,10 @@ function Screen(props){
                     }
                 }    
             } catch (error) {
-                console.log(error)
+               //console.log(error)
             }
         }
+        res = st2.concat(sto);
         return res
     }
 
@@ -75,6 +87,9 @@ function Screen(props){
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             
             let pacientes = [];
+            let st1 = [];
+            let st2 = [];
+            let sto = [];
             try {
                 /*let cont = 0;
                 datos[i].pacientes.forEach(element => {
@@ -102,7 +117,7 @@ function Screen(props){
                                 8: no llegó (Omitir)
                         */
                         if(datos[i].pacientes[j].Estado === 2){
-                            pacientes.unshift(<td ready={true} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
+                            st2.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
                                 datos[i].pacientes[j].Nombre}<br/>
                                 {datos[i].pacientes[j].Modulo}
                             </td>);
@@ -110,36 +125,38 @@ function Screen(props){
                         }else{
                             //pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             if(datos[i].pacientes[j].Estado === 1){
-                                pacientes.push(<td ready={true} key={i+"x"+j} className={"align-items-center align-middle p-0 "+estilo}>
+                                st2.push(<td ready={"true"} key={i+"x"+j} className={"align-items-center align-middle p-0 "+estilo}>
                                     {datos[i].pacientes[j].Nombre}<br/>
                                     {datos[i].pacientes[j].Modulo}
                                 </td>);
                             }else{
-                                pacientes.push(<td ready={false} key={i+"x"+j} className="fondo">{" "}</td>);
+                                sto.push(<td ready={"false"} key={i+"x"+j} className="fondo">{" "}</td>);
                             }
                         }
                     }else{
-                        pacientes.push(<td ready={false} key={i+"x"+j} className="fondo">{" "}</td>);
+                        sto.push(<td ready={"false"} key={i+"x"+j} className="fondo">{" "}</td>);
                     }
                 }
+                pacientes = st2.concat(st1).concat(sto);
 
                 let readies = false;
                 pacientes.map((p)=>{
-                    readies = readies || p.props.ready;
+                    readies = readies || p.props.ready === "true";
+                    return 0;
                 })
                 if(readies){
                     if(verdes[i]){
                         //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
                         TBlue.unshift(
-                            <tr key={datos[i].id +"/"+i}>
+                            <tr key={datos[i].id +"/"+i} llamando="true">
                                 {/*<td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>*/}
                                 <td className="align-middle fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                                 {pacientes}
                             </tr>    
-                        )    
+                        )
                     }else{
                         TBlue.push(
-                            <tr key={datos[i].id}>
+                            <tr key={datos[i].id} llamando="false">
                                 {/*<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>*/}
                                 <td className="align-middle fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
                                 {pacientes}
@@ -163,12 +180,33 @@ function Screen(props){
         return TBlue;
     }
 
+    const blueBodyRef = useRef();
+    const blueContRef = useRef();
+
+
+    const TablaAzulAnimation = () =>{
+        const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
+        const rows = tbody.childNodes;
+        try {
+            const rowHeight = rows[0].offsetHeight; // Altura de una fila
+            const totalRows = rows.length; // Número total de filas
+            const totalHeight = rowHeight * totalRows; // Altura total de todas las filas
+            //const containerHeight = blueContRef.current.offsetHeight
+            const scrollSpeed = 150;
+            const animationDuration = totalHeight / scrollSpeed; // Duración de la animación en segundos
+            tbody.style.animation = `ticker-vertical ${animationDuration}s linear infinite`;
+        } catch (error) {
+            
+        }
+    }
+
     const JData = new Datos();
 
     //const data = JData.armaJSON(Number(props.dpto));
 
     const [blue,setBlue] = useState([]);
     const [blue2,setBlue2] = useState([]);
+    const [turquesa,setTurquesa] = useState([]);
     const [green,setGreen] = useState([])
     const [Pantalla,setPantalla] = useState({
         "nombre":"",//nombre de la pantalla
@@ -181,12 +219,41 @@ function Screen(props){
 
     const [anima,setAnima] = useState("");
     const [animaC,setAnimaC] = useState("");
+    const [animaB,setAnimaB] = useState("");
     //const calendar = new Reloj();
     //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
     //const [fecha, setFecha] = useState(calendar.getFecha());
     const [found,setFound] = useState(true)
+    const [show,setShow] = useState(true);
+    const esperar =(t)=>{
+        return new Promise(
+            resolve =>{
+                setTimeout(resolve,t);
+            }
+        )
+    }
     //const sound = new Audio(bell);
     //const audioRef = useRef();
+    const Mostrar = ()=>{
+        if(blue.length > 0){
+            esperar(3000).then(()=>{
+                console.log("esperando")
+                let verdes = [];
+                blue.map(b=>{
+                    if(b.props.llamando === "true"){
+                        verdes.push(b);
+                    }
+                    return 0;
+                })
+                setTurquesa(verdes)
+            }).finally(()=>{
+                console.log("finalizado")
+                setTurquesa([])
+            });
+        }else{
+            setTurquesa([])
+        }
+    }
     useEffect(()=>{
         
         if(found){
@@ -210,29 +277,32 @@ function Screen(props){
                     poli:datos.poli
                 });
                 setBlue(TablaAzul(datos.Datos));
-                console.log(datos.Datos);
+                
+                
                 setGreen(TablaVerde(datos.Datos));
-                if(blue.length > 9){
+                if(blue.length > 5){
                     setAnimaC("ticker-table-container");
                     setAnima("ticker-table");
+                    setAnimaB("TBody")
                     setBlue2(blue)
+                    TablaAzulAnimation();
                 }else{
                     setAnimaC("");
+                    setAnimaB("")
                     setAnima("");
                     setBlue2([])
                 }
                 setFound(true);
 
-            });
-
-            
-            console.log("FIN")
+            }).catch();
+            //console.log(blueRef.current);
         }
         
         if(JSON.stringify(datosP) !== JSON.stringify(preDatosP)){
             //console.log("CAMBIO");
             //audioRef.current.play();
             //sound.play();
+            //Mostrar();
         }
     })
 
@@ -255,17 +325,20 @@ function Screen(props){
             </div>
             
             <div className="d-flex justify-content-around">{/* Pacientes, especialistas, llamados y información */}
-                <div className="col-9">{/* Box X especialista X pacientes y Información*/}
-                    <div className={animaC}>
+                <div className="col-8">{/* Box X especialista X pacientes y Información*/}
+                    <div ref={blueContRef} className={animaC}>
                         <Table bordered className={anima}>
                             <thead className="fs-4 position-sticky z-3">
                                 <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
                                     {/*<th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "RECINTO" : "MÓDULO"}</th>*/}
-                                    <th className="p-0 border border-1 border-white mainTable">{"ATENCIÓN"}</th>
-                                    <th className="p-0 border border-1 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
+                                    <th className="p-0 border border-2 border-white mainTable">{"ATENCIÓN"}</th>
+                                    <th className="p-0 border border-2 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                 </tr>
                             </thead>
-                            <tbody className="z-0">
+                            <tbody className="z-3">
+                                {turquesa}
+                            </tbody>
+                            <tbody ref={blueBodyRef} className={"z-0 "+animaB}>
                                 {blue}
                                 {blue2}
                             </tbody>
@@ -273,7 +346,7 @@ function Screen(props){
                     </div>
                     
 
-                    <div className="fixed-bottom z-4 fondo col-9">
+                    <div className="fixed-bottom z-4 fondo col-8">
                         <Row className="m-1">
                             <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
                             <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
@@ -288,7 +361,7 @@ function Screen(props){
 
                 </div>
                 
-                <div className="col-3 fondo">{/* Paciente X llamado */}
+                <div className="col-4 fondo">{/* Paciente X llamado */}
                     
                     <Table bordered className="p-0">
                         <thead>

@@ -57,7 +57,8 @@ export class ETL{
            }
             //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
             try {
-                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),7):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
+                newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? 
+                    this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),7):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
             } catch (error) {
                //console.log("ecepcion")
                 newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
@@ -286,7 +287,7 @@ export class ETL{
     limpiaOnlyBox(box){
         let result = box;
         let esBox = false;
-        let arrayBox = box.split(" ");
+        //let arrayBox = box.split(" ");
 
         
         
