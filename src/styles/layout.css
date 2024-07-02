@@ -9,6 +9,12 @@
     top: 16.75vh;
 }
 
+.callResize{
+  width: 150%;
+  height: 150%;
+}
+
+
 .imagen{
     height:13vh;
 }
@@ -72,7 +78,7 @@
   }
   
   /* Estilo para cada fila */
-  .ticker-table TBody tr {
+  .ticker-table .TBody .DrNoLlama {
     display: table;
     width: 100%;
     table-layout: fixed; /* Mantiene el ancho de columna uniforme */

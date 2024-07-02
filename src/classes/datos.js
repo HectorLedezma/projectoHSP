@@ -130,7 +130,7 @@ export class Datos{
                 if(nombreSala.nameModule === ""){
 
                     //console.log(this.modtick.tickets[i])
-                    nombreSala.nameModule = "En espera"//this.modtick.tickets[i].nameModule//(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
+                    nombreSala.nameModule = ""//this.modtick.tickets[i].nameModule//(this.modtick.tickets[i].nombre_prof !== null? this.etl.recortaNombre(this.modtick.tickets[i].nombre_prof) : this.etl.abreviar(this.modtick.tickets[i].nameType,15));
 
                 }else{
                     nombreSala.nameModule = this.etl.limpiaOnlyBox(nombreSala.nameModule)
@@ -175,6 +175,7 @@ export class Datos{
                     //para capturar todos los tickets que correspondan al mismo medico
                     if(datos[i].dr === datos[j].dr){
                         subPatient.push({
+                            "id":datos[j].id,
                             "Modulo":datos[j].name,
                             "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,

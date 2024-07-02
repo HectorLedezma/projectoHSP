@@ -296,7 +296,7 @@ export class ETL{
         if(!esBox){
             result = this.limpiaOnlyProcess(result)
         }else{
-            const boxLetter = ["B","O","X","0","0"]
+            const boxLetter = ["0","0"]
             const boxSplit = box.split("");
             let racha = 0;
             
@@ -397,6 +397,18 @@ export class ETL{
 
     ticketSort(tickets){
         
+    }
+
+    CallTickets(datos){
+        let llamas = [];
+        datos.map((d)=>{
+            d.map((p)=>{
+                if(p.Estado === 2){
+                    llamas.push(p);
+                }
+            })
+        })
+        return llamas;
     }
 
     
