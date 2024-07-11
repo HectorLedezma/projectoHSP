@@ -1,0 +1,9 @@
+.modal-title{
+    font-size: 100%;
+}
+
+.modal{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
