@@ -57,11 +57,17 @@
   .ticker-table th,
   .ticker-table td {
     border: 1px solid #ddd;
+    padding: 0px !important;
+    text-align: center;
+  }
+
+  .ColBox{
+    width: max-content;
   }
 
   
   /* Estilo para el cuerpo de la tabla */
-  .ticker-table TBody {
+  .ticker-table .TBody {
     display: block;
     position: absolute;
     width: 100%;
@@ -72,13 +78,13 @@
   .ticker-table thead {
     display: table;
     width: 100%;
-    table-layout: fixed;
+    table-layout:fixed;
     background-color: #333;
     color: #fff;
   }
   
   /* Estilo para cada fila */
-  .ticker-table .TBody .DrNoLlama {
+  .ticker-table tbody tr {
     display: table;
     width: 100%;
     table-layout: fixed; /* Mantiene el ancho de columna uniforme */

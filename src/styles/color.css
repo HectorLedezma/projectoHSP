@@ -5,6 +5,10 @@
     padding: 0px;
 }
 
+.noBordes{
+    border: none;
+}
+
 .mainTableCell{
     color: #0077a7 !important;
     background-color: #ffffff !important;
@@ -28,39 +32,36 @@
 .llamandoPendiente{
     background-color: #049100 !important; /* Regresa al color inicial */
     color: #ffffff !important;
-    font-weight: bolder;
     font-size: 35px;
 }
 
 .espera{
     background-color: #FFB900 !important;
-    font-weight: bolder;
     font-size: 35px;
 
 }
 
 .atendiendo{
     background-color: #00C1CD !important;
-    font-weight: bolder;
     font-size: 35px;
 }
 
 @keyframes changeBackground {
     0% {
-        background-color: #ffffff; /* Color inicial */
-        color: #000000;
-        font-weight: bolder;
-        font-size: 35px;
-    }
-    50% {
-        background-color: #049100; /* Regresa al color inicial */
+        background-color: #049100; /* Color inicial */
         color: #ffffff;
         font-weight: bolder;
         font-size: 35px;
     }
+    50% {
+        background-color: #ffffff; /* Regresa al color inicial */
+        color: #000a63;
+        font-weight: bolder;
+        font-size: 35px;
+    }
     100% {
-        background-color: #ffffff; /* Color inicial */
-        color: #000000;
+        background-color: #049100; /* Color inicial */
+        color: #ffffff;
         font-weight: bolder;
         font-size: 35px;
     }

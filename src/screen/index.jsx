@@ -95,6 +95,7 @@ function Screen(props){
             let st1 = [];
             let st2 = [];
             let sto = [];
+            let boxName = "";
             try {
                 /*let cont = 0;
                 datos[i].pacientes.forEach(element => {
@@ -121,18 +122,17 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
+                        boxName = datos[i].pacientes[j].box;
                         if(datos[i].pacientes[j].Estado === 2){
                             st2.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
-                                datos[i].pacientes[j].Nombre}<br/>
-                                {datos[i].pacientes[j].Modulo}
+                                datos[i].pacientes[j].Nombre}
                             </td>);
                             verdes[i] = true;
                         }else{
                             //pacientes.push(<td key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{datos[i].pacientes[j].Nombre}</td>);
                             if(datos[i].pacientes[j].Estado === 1){
-                                st2.push(<td ready={"true"} key={i+"x"+j} className={"align-items-center align-middle p-0 "+estilo}>
-                                    {datos[i].pacientes[j].Nombre}<br/>
-                                    {datos[i].pacientes[j].Modulo}
+                                st1.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center align-middle p-0 "+estilo}>
+                                    {datos[i].pacientes[j].Nombre}
                                 </td>);
                             }else{
                                 sto.push(<td ready={"false"} key={i+"x"+j} className="fondo">{" "}</td>);
@@ -152,10 +152,11 @@ function Screen(props){
                 if(readies){
                     if(verdes[i]){
                         //console.log(verdes[i]+" // "+datos[i].box+" || "+datos[i].medico);
-                        llamando.unshift(
-                            <tr key={datos[i].id} llamando="true" className="DrLlama z-4">
-                                {<td className="fs-3 p-0 fw-bold mainTableCell">{datos[i].box}</td>}
-                                <td className="align-middle fs-3 p-0 fw-bold mainTable" >{
+                        //console.log()
+                        TBlue.unshift(
+                            <tr key={datos[i].id} llamando="true">
+                                <td className="fs-3 p-0 mainTableCell align-middle" width={colWidth}>{datos[i].pacientes[0].Modulo}</td>
+                                <td className="align-middle fs-3 p-0 mainTable" >{
                                     datos[i].medico
                                 }</td>
                                 {pacientes}
@@ -163,14 +164,11 @@ function Screen(props){
                         )
                     }else{
                         TBlue.push(
-                            <tr key={datos[i].id} llamando="false"  className="DrNoLlama">
-                                {<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>}
-                                <td className="align-middle fs-3 p-0 fw-bold mainTable" >
+                            <tr key={datos[i].id} llamando="false">
+                                <td className="fs-3 p-0 mainTableCell align-middle" width={colWidth} >{boxName}</td>
+                                <td className="align-middle fs-3 p-0 mainTable" >
                                     {
                                         datos[i].medico
-                                    } <br/>
-                                    {
-                                        datos[i].box
                                     }
                                 </td>
                                 {pacientes}
@@ -182,8 +180,8 @@ function Screen(props){
 
                 TBlue.push(
                     <tr key={datos[i].id} className="DrNoLlama">
-                        {<td className="fs-3 p-0 fw-bold mainTableCell" >{datos[i].box}</td>}
-                        <td className="fs-3 p-0 fw-bold mainTable" >{datos[i].medico}</td>
+                        <td className="fs-3 p-0 mainTableCell align-middle" >{boxName}</td>
+                        <td className="fs-3 p-0 mainTable" >{datos[i].medico}</td>
                         {pacientes}
                     </tr>
                 );
@@ -272,6 +270,15 @@ function Screen(props){
             }
         )
     }
+
+    const [call, setCall] = useState(false);
+    const llamando = () =>{
+        setCall(true);
+        esperar(3000).finally(()=>{
+            setCall(false)
+        });
+    }
+
     //const sound = new Audio(bell);
     //const audioRef = useRef();
     const Mostrar = ()=>{
@@ -294,12 +301,17 @@ function Screen(props){
             setTurquesa([])
         }
     }
+
+    const colBox = useRef();
+    const [colWidth,setColWidth] = useState(0);
+
     useEffect(()=>{
         
         
         let data = JData.armaJSON(Number(props.dpto));
-        if(paso>4){
+        if(paso>3){
             setListo(true);
+            setColWidth(colBox.current.offsetWidth);
         }else{
             setListo(false);
         }
@@ -323,9 +335,9 @@ function Screen(props){
             });
             setBlue(TablaAzul(datos.Datos));
             
-            
             setGreen(TablaVerde(datos.Datos));
-            if((blue.length+turquesa.length) > 5){
+            console.log("blue = "+blue.length);
+            if((blue.length) > 8){//activar la animación
                 setAnimaC("ticker-table-container");
                 setAnima("ticker-table");
                 setAnimaB("TBody")
@@ -348,9 +360,7 @@ function Screen(props){
             const preDat = etl.CallTickets(preDatosP);
             if(JSON.stringify(dat) !== JSON.stringify(preDat)){
                 console.log("cambio")
-                esperar(2000).then(fin=>{
-                    console.log(dat);
-                });
+                    
                 console.log("fin cambio")
             }else{
                 
@@ -385,14 +395,14 @@ function Screen(props){
                             <Table bordered className={anima}>
                                 <thead className="fs-4 position-sticky z-3">
                                     <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
-                                        {<th className="p-0 border border-1 border-white mainTable">{Pantalla.poli? "BOX" : "MÓDULO"}</th>}
+                                        <th ref={colBox} className="p-0 border border-1 border-white mainTable ColBox">BOX</th>
                                         <th className="p-0 border border-2 border-white mainTable">{"ATENCIÓN"}</th>
                                         <th className="p-0 border border-2 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                     </tr>
                                 </thead>
-                                <tbody className="z-3" ref={CallRef}>
+                                {/*<tbody className="z-3" ref={CallRef}>
                                     {turquesa}
-                                </tbody>
+                                </tbody>*/}
                                 <tbody ref={blueBodyRef} className={"z-0 "+animaB}>
                                     {blue}
                                     {blue2}
