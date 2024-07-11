@@ -344,7 +344,7 @@ export class ETL{
                     nProc = nProc+arrayBox[i];
                 }
             }
-            result = "S. PROCE "+nProc;
+            result = "SP "+nProc;
         }
         return result.toUpperCase()
     }
