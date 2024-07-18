@@ -13,13 +13,13 @@ import Carrusel from "../components/carrusel";
 import { Outlet } from "react-router-dom";
 import { ETL } from "../classes/etl";
 import LoadScreen from "../components/load";
+import Llamado from "../components/Llamado";
 //import { error } from "console";
 
 /* border border-primary */
 
 
 function Screen(props){
-
 
     const colorState = (st) =>{
         let estilo = "espera";
@@ -83,11 +83,13 @@ function Screen(props){
         return res
     }
 
-    
+    const [preCalls,setPreCalls] = useState([]);
+    const [calls,setCalls] = useState([]);
 
     const TablaAzul = (datos) => {//funcion que extrae datos del JSON y los pasa a la tabla BOX/Especialista/Paciente
         let TBlue = [];
         let verdes = [];
+        setPreCalls(calls);
         let llamando = [];
         for(let i = 0;i<datos.length;i++){//recorre el arreglo de datos proporcionado
             
@@ -122,8 +124,9 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
-                        boxName = datos[i].pacientes[j].box;
+                        boxName = datos[i].pacientes[j].Modulo;
                         if(datos[i].pacientes[j].Estado === 2){
+                            llamando.unshift(datos[i].pacientes[j]);
                             st2.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
                                 datos[i].pacientes[j].Nombre}
                             </td>);
@@ -155,7 +158,7 @@ function Screen(props){
                         //console.log()
                         TBlue.unshift(
                             <tr key={datos[i].id} llamando="true">
-                                <td className="fs-3 p-0 mainTableCell align-middle" width={colWidth}>{datos[i].pacientes[0].Modulo}</td>
+                                <td className="fs-3 p-0 mainTableCell align-middle" width={colWidth}>{boxName}</td>
                                 <td className="align-middle fs-3 p-0 mainTable" >{
                                     datos[i].medico
                                 }</td>
@@ -188,7 +191,7 @@ function Screen(props){
             }
             
         }
-        setTurquesa(llamando);
+        setCalls(llamando);
         return TBlue;
     }
 
@@ -197,9 +200,9 @@ function Screen(props){
 
 
     const TablaAzulAnimation = () =>{
-        const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
-        const rows = tbody.childNodes;
         try {
+            const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
+            const rows = tbody.childNodes;
             const rowHeight = rows[0].offsetHeight; // Altura de una fila
             const totalRows = rows.length; // Número total de filas
             const totalHeight = rowHeight * totalRows; // Altura total de todas las filas
@@ -217,10 +220,10 @@ function Screen(props){
     const CallRef = useRef();
     
     const CallAnimation = () =>{
-        const llama = CallRef.current
-        const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
-        const rows = tbody.childNodes;
         try {
+            const llama = CallRef.current
+            const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
+            const rows = tbody.childNodes;
             
             for(let j = 0;j<llama.childNodes.length;j++){
                 //console.log(llama.childNodes[j].childNodes);
@@ -240,7 +243,6 @@ function Screen(props){
 
     const [blue,setBlue] = useState([]);
     const [blue2,setBlue2] = useState([]);
-    const [turquesa,setTurquesa] = useState([]);
     const [green,setGreen] = useState([])
     const [Pantalla,setPantalla] = useState({
         "nombre":"",//nombre de la pantalla
@@ -249,15 +251,13 @@ function Screen(props){
     });
 
     const [datosP,setDatos] = useState([]);
+    
     const [preDatosP,setPreDatos] = useState([]);
+    
 
     const [anima,setAnima] = useState("");
     const [animaC,setAnimaC] = useState("");
     const [animaB,setAnimaB] = useState("");
-    //const calendar = new Reloj();
-    //const [hora, setHora] = useState(calendar.getHora().hora+":"+calendar.getHora().minu);
-    //const [fecha, setFecha] = useState(calendar.getFecha());
-    const [found,setFound] = useState(true)
     const [listo,setListo] = useState(true);
 
     const [paso, SetPaso] = useState(0);
@@ -271,36 +271,42 @@ function Screen(props){
         )
     }
 
+    const [vbox,setVbox] = useState("");
+    const [vpac,setVpac] = useState("");    
+    const [vdoc,setVdoc] = useState("");
+
+    const Buscall = () =>{
+        //console.log(preCalls);//Arreglo anterior
+        //console.log("");
+        //console.log(calls);//Arreglo nuevo
+        //buscar diferencias
+        if(preCalls.length<calls.length){//si hay mas llamados que antes
+            let preCallStr = [];
+            preCalls.map((c)=>{//transforma los llamados antiguos en strings
+                preCallStr.push(JSON.stringify(c));
+            })
+
+            calls.map((c)=>{
+                let cStr = JSON.stringify(c);
+                if(!preCallStr.includes(cStr)){
+                    setVbox(c.Modulo);
+                    setVpac(c.Nombre);
+                    setVdoc(c.Medico);
+                    llamando();
+                    esperar(750);
+                }
+            });
+        }
+    }
+
     const [call, setCall] = useState(false);
     const llamando = () =>{
         setCall(true);
-        esperar(3000).finally(()=>{
-            setCall(false)
+        esperar(3500).finally(()=>{
+            setCall(false);
         });
     }
 
-    //const sound = new Audio(bell);
-    //const audioRef = useRef();
-    const Mostrar = ()=>{
-        if(blue.length > 0){
-            esperar(3000).then(()=>{
-                console.log("esperando")
-                let verdes = [];
-                blue.map(b=>{
-                    if(b.props.llamando === "true"){
-                        verdes.push(b);
-                    }
-                    return 0;
-                })
-                setTurquesa(verdes)
-            }).finally(()=>{
-                console.log("finalizado")
-                setTurquesa([])
-            });
-        }else{
-            setTurquesa([])
-        }
-    }
 
     const colBox = useRef();
     const [colWidth,setColWidth] = useState(0);
@@ -336,7 +342,7 @@ function Screen(props){
             setBlue(TablaAzul(datos.Datos));
             
             setGreen(TablaVerde(datos.Datos));
-            console.log("blue = "+blue.length);
+            //console.log("blue = "+blue.length);
             if((blue.length) > 8){//activar la animación
                 setAnimaC("ticker-table-container");
                 setAnima("ticker-table");
@@ -355,18 +361,20 @@ function Screen(props){
         }).catch();
         
         try {
-            const etl = new ETL();
-            const dat = etl.CallTickets(datosP);
-            const preDat = etl.CallTickets(preDatosP);
-            if(JSON.stringify(dat) !== JSON.stringify(preDat)){
-                console.log("cambio")
-                    
-                console.log("fin cambio")
+            //const etl = new ETL();
+            //const dat = etl.CallTickets(datosP);
+            //console.log("revisa");
+            //const preDat = etl.CallTickets(preDatosP);
+            //console.log(JSON.stringify(datosP)+"\n"+JSON.stringify(preDatosP))
+            if(JSON.stringify(datosP)!==JSON.stringify(preDatosP)){
+                //console.log("cambio")
+                Buscall();
+                //console.log("fin cambio")
             }else{
                 
             }
         } catch (error) {
-            
+            console.log(error);
         }
         
     })
@@ -450,6 +458,7 @@ function Screen(props){
                         </Table>
                     </div>
                 </div>
+                <Llamado className='d-flex justify-content-center align-items-center' toggle={call} box={vbox} paciente={vpac} doctor={vdoc}/>
             </div>
             <div hidden={listo}>
                 <LoadScreen/>

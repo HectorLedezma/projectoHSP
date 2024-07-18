@@ -1,4 +1,5 @@
 import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import timbre from "../sounds/Bell.mp3"
 import "../styles/color.css"
 import "../styles/modal.css"
 
@@ -7,23 +8,25 @@ function Llamado(args) {
   const pac = args.paciente
   const box = args.box;
   const doc = args.doctor
-
+  const sound = new Audio(timbre);
   return (
-    <Modal centered isOpen={modal} {...args}>
-        <ModalHeader style={{
-            width:"50vw",height:"25vh",fontSize:"200px"
-        }} className='d-flex justify-content-center align-items-center llamando noBordes'>
-            {"PACIENTE "+pac}
+    <Modal centered onAnimationStart={ev=>{
+        ev.preventDefault();
+        sound.play();
+        //console.log(doc);
+    }} isOpen={modal} {...args}>
+        <ModalHeader className='d-flex justify-content-center align-items-center llamando noBordes'>
+            {"PACIENTE: "+pac.toUpperCase()}
         </ModalHeader>
-        <ModalBody style={{
-            width:"50vw",height:"25vh",fontSize:"100%"
-        }} className='d-flex justify-content-center align-items-center llamando'>
-            {"BOX "+box}
+        <ModalBody className='d-flex justify-content-center align-items-center llamando'>
+            <h5 className='modal-text'>
+                {doc}
+            </h5>
         </ModalBody>
-        <ModalFooter style={{
-            width:"50vw",height:"25vh",fontSize:"100%"
-        }} className='d-flex justify-content-center align-items-center llamando noBordes'>
-            {"DR. "+doc}
+        <ModalFooter className='d-flex justify-content-center align-items-center llamando noBordes'>
+            <h5 className='modal-text'>
+                {"BOX "+box}
+            </h5>
         </ModalFooter>
     </Modal>
   );

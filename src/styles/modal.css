@@ -1,9 +1,43 @@
-.modal-title{
-    font-size: 100%;
+.modal{
+    display: flex !important;
+    justify-content: center;
 }
 
-.modal{
-    display: flex;
+.modal-title{
+    font-size: 3.5rem;
+    font-weight: 400 !important;
+    position: absolute;
+}
+
+.modal-text{
+    font-size: 3.5rem;
+    font-weight: 400 !important;
+    position: absolute;
+}
+
+.modal-header{
+    width: 980%;
+    margin-left: -440%;
+    height: 15vh;
+}
+
+.modal-body {
+
+    width: 980%;
+    margin-left: -440%;
+    height: 15vh;
+    
+}
+
+.modal-footer{
+
+    width: 980%;
+    margin-left: -440%;
+    height: 15vh;
+}
+
+.modal-dialog{
+    display: flex !important;
     justify-content: center;
-    align-self: center;
+    width: 10vw;
 }

@@ -140,6 +140,7 @@ export class Datos{
                     "id":this.modtick.tickets[i].id, 
                     "name":(nombreSala.nameModule),//modulo
                     "dr":doctor,
+                    "drCompleto":this.etl.capitalizeName(this.modtick.tickets[i].nombre_prof),
                     "paciente":(this.modtick.tickets[i].nombre_paciente !== null ? this.etl.recortaNombreP(this.modtick.tickets[i].nombre_paciente): this.modtick.tickets[i].number + this.modtick.tickets[i].letter),
                     "estado":this.modtick.tickets[i].estado,
                     "hora":this.modtick.tickets[i].hora_citacion
@@ -179,7 +180,8 @@ export class Datos{
                             "Modulo":datos[j].name,
                             "Nombre":datos[j].paciente,
                             "Estado":datos[j].estado,
-                            "Hora":this.etl.getHora(datos[j].hora)
+                            "Hora":this.etl.getHora(datos[j].hora),
+                            "Medico":datos[i].drCompleto
                         });
                     }
                 }
