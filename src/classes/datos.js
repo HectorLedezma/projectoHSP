@@ -122,7 +122,7 @@ export class Datos{
 
         for(let i = 0; i<this.modtick.tickets.length;i++){
             // si el ticker coincide con el id del dpto. y que su estado no sea 4 ni 13 this.modtick.tickets[i].estado !== 4 && this.modtick.tickets[i].idDepartment === idd &&
-            if((this.modtick.tickets[i].estado !== 13) /*&& (this.modtick.tickets[i].estado !== 4)*/){
+            if((this.modtick.tickets[i].estado !== 13) && (this.modtick.tickets[i].estado !== 4)){
                //console.log(this.modtick.tickets[i]);
                 let nombreSala = getModul(this.modtick.tickets[i].idModule);
                 //console.log("nombreSala = "+nombreSala.nameModule);
