@@ -124,7 +124,7 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
-                        if(datos[i].pacientes[j].Estado === 2){
+                        if(datos[i].pacientes[j].Estado === 2 && listo){
                             boxName = datos[i].pacientes[j].Modulo;
                             llamando.unshift(datos[i].pacientes[j]);
                             st2.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
@@ -222,7 +222,7 @@ function Screen(props){
     const CallAnimation = () =>{
         try {
             const llama = CallRef.current
-            const tbody = blueBodyRef.current;//document.querySelector('.ticker-table tbody');
+            const tbody = blueBodyRef.current;
             const rows = tbody.childNodes;
             
             for(let j = 0;j<llama.childNodes.length;j++){
@@ -262,6 +262,8 @@ function Screen(props){
 
     const [paso, SetPaso] = useState(0);
 
+    const callDelay = 3500;
+
 
     const esperar =(t)=>{
         return new Promise(
@@ -276,23 +278,20 @@ function Screen(props){
     const [vdoc,setVdoc] = useState("");
     //funcion para activar llamado
     const Buscall = () =>{
-        //console.log(preCalls);//Arreglo anterior
-        //console.log("");
-        //console.log(calls);//Arreglo nuevo
+        //preCalls -> Arreglo anterior
+        //calls -> Arreglo nuevo
         //buscar diferencias
         if(preCalls.length<calls.length){//si hay mas llamados que antes
             let preCallStr = preCalls.map((c)=>{//transforma la lista antigua de llamados en strings
                 return JSON.stringify(c);
             })
 
-
             calls.forEach((c,i)=>{
                 let cStr = JSON.stringify(c);//trasforma la lista nueva de llamados en string
                 if(!preCallStr.includes(cStr)){//si el llamado no esta en la lista antigua
-                    //inicia la animacion del llamado
                     setTimeout(()=>{
-                        llamando(c);
-                    },5000*i);
+                        llamando(c);//inicia la animacion del llamado
+                    },(callDelay+1500)*i);//hace una pausa de 1,5 segundos antes de continuar
                 }
             })
             
@@ -306,7 +305,7 @@ function Screen(props){
         setVpac(c.Nombre);
         setVdoc(c.Medico);
         setCall(true);
-        esperar(3500).finally(()=>{
+        esperar(callDelay).finally(()=>{
             setCall(false);
         });
     }
@@ -317,20 +316,21 @@ function Screen(props){
 
     useEffect(()=>{
         
-        
         let data = JData.armaJSON(Number(props.dpto));
-        if(paso>3){
+        //console.log("paso = "+paso);
+        if(paso > 3){
             setListo(true);
             setColWidth(colBox.current.offsetWidth);
+            SetPaso(paso);
         }else{
             setListo(false);
         }
         data.then(datos=>{
             
-            
+        
             setPreDatos(datosP);
             setDatos(datos.Datos);
-            
+        
             setPantalla({
                 nombre:datos.Name,
                 mensaje:(datos.poli?datos.Messages.concat([
@@ -361,7 +361,7 @@ function Screen(props){
                 setBlue2([])
             }
             
-            CallAnimation();
+            //CallAnimation();
             SetPaso(paso+1);
         }).catch();
         
@@ -387,7 +387,7 @@ function Screen(props){
     
     return(
         <div>{/* cuadro de la pantalla */}
-            <div hidden={!listo}>
+            <div>
                 <div className="d-flex justify-content-center sticky-top fondo z-4">{/* Información piso y reloj */}
                     <Row xl={12} className="header-container d-flex justify-content-around border border-primary">
                         <Col xl={3} className="d-flex align-items-center justify-content-center"><Image src={logoUCEN} className="imagen m-0"/></Col>{/* Logo UCentral */}
@@ -431,9 +431,9 @@ function Screen(props){
                                 <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                             </Row>
                             
-                                <div className="bg-warning fw-bold fs-3" style={{width:"100vw"}}>
-                                    <Carrusel items={Pantalla.mensaje} time={5}/>
-                                </div>
+                            <div className="bg-warning fw-bold fs-3" style={{width:"100vw"}}>
+                                <Carrusel items={Pantalla.mensaje} time={5}/>
+                            </div>
                             
                         </div>
 
@@ -466,7 +466,7 @@ function Screen(props){
                 <Llamado className='d-flex justify-content-center align-items-center' toggle={call} box={vbox} paciente={vpac} doctor={vdoc}/>
             </div>
             <div hidden={listo}>
-                <LoadScreen/>
+                <LoadScreen listo={listo}/>
             </div>
             {/*<audio ref={audioRef}>
                 <source src={bell} type="audio/mpeg"/>

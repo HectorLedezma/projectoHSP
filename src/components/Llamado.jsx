@@ -14,7 +14,9 @@ function Llamado(args) {
         ev.preventDefault();
         sound.play();
         //console.log(doc);
-    }} isOpen={modal} {...args}>
+    }} isOpen={modal} {...args}
+    
+    >
         <ModalHeader className='d-flex justify-content-center align-items-center llamando noBordes'>
             {"PACIENTE: "+pac.toUpperCase()}
         </ModalHeader>
