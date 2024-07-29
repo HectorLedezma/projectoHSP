@@ -413,17 +413,17 @@ export class ETL{
 
     capitalizeName(str) {
         let result = "";
-        console.log(str)
+        //console.log(str)
         let strList = str.split(" ");
-        console.log("lista: ")
-        console.log(strList)
+        //console.log("lista: ")
+        //console.log(strList)
         strList.map((s)=>{
             if (typeof s !== 'string' || s.length === 0) {
                 return '';
             }
             result = result + s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()+" ";
         });
-        console.log("Result: "+result);
+        //console.log("Result: "+result);
         return result;
         
     }
