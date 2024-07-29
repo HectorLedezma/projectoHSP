@@ -110,7 +110,7 @@ function Screen(props){
                 });*/
                 verdes.push(false);
                 
-                const lim = (Pantalla.poli? 3:2);
+                const lim = 3;
                 //let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
                     //j-1 => 2 -> [0, 1, 2] // lim = 4 -> [0, 1, 2, 3]
@@ -124,8 +124,8 @@ function Screen(props){
                                 13: fin (Omitir)
                                 8: no llegó (Omitir)
                         */
-                        boxName = datos[i].pacientes[j].Modulo;
                         if(datos[i].pacientes[j].Estado === 2){
+                            boxName = datos[i].pacientes[j].Modulo;
                             llamando.unshift(datos[i].pacientes[j]);
                             st2.unshift(<td ready={"true"} key={i+"x"+j} className={"align-items-center p-0 "+estilo}>{
                                 datos[i].pacientes[j].Nombre}
@@ -274,33 +274,37 @@ function Screen(props){
     const [vbox,setVbox] = useState("");
     const [vpac,setVpac] = useState("");    
     const [vdoc,setVdoc] = useState("");
-
+    //funcion para activar llamado
     const Buscall = () =>{
         //console.log(preCalls);//Arreglo anterior
         //console.log("");
         //console.log(calls);//Arreglo nuevo
         //buscar diferencias
         if(preCalls.length<calls.length){//si hay mas llamados que antes
-            let preCallStr = [];
-            preCalls.map((c)=>{//transforma los llamados antiguos en strings
-                preCallStr.push(JSON.stringify(c));
+            let preCallStr = preCalls.map((c)=>{//transforma la lista antigua de llamados en strings
+                return JSON.stringify(c);
             })
 
-            calls.map((c)=>{
-                let cStr = JSON.stringify(c);
-                if(!preCallStr.includes(cStr)){
-                    setVbox(c.Modulo);
-                    setVpac(c.Nombre);
-                    setVdoc(c.Medico);
-                    llamando();
-                    esperar(750);
+
+            calls.forEach((c,i)=>{
+                let cStr = JSON.stringify(c);//trasforma la lista nueva de llamados en string
+                if(!preCallStr.includes(cStr)){//si el llamado no esta en la lista antigua
+                    //inicia la animacion del llamado
+                    setTimeout(()=>{
+                        llamando(c);
+                    },5000*i);
                 }
-            });
+            })
+            
         }
     }
 
     const [call, setCall] = useState(false);
-    const llamando = () =>{
+    const llamando = (c) =>{
+        //prepara los datos para el modal
+        setVbox(c.Modulo);
+        setVpac(c.Nombre);
+        setVdoc(c.Medico);
         setCall(true);
         esperar(3500).finally(()=>{
             setCall(false);
@@ -322,6 +326,7 @@ function Screen(props){
             setListo(false);
         }
         data.then(datos=>{
+            
             
             setPreDatos(datosP);
             setDatos(datos.Datos);
@@ -366,7 +371,7 @@ function Screen(props){
             //console.log("revisa");
             //const preDat = etl.CallTickets(preDatosP);
             //console.log(JSON.stringify(datosP)+"\n"+JSON.stringify(preDatosP))
-            if(JSON.stringify(datosP)!==JSON.stringify(preDatosP)){
+            if((JSON.stringify(datosP)!==JSON.stringify(preDatosP))){
                 //console.log("cambio")
                 Buscall();
                 //console.log("fin cambio")
@@ -462,7 +467,6 @@ function Screen(props){
             </div>
             <div hidden={listo}>
                 <LoadScreen/>
-                <h1>CARGANDO</h1>
             </div>
             {/*<audio ref={audioRef}>
                 <source src={bell} type="audio/mpeg"/>
