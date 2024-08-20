@@ -110,7 +110,7 @@ function Screen(props){
                 });*/
                 verdes.push(false);
                 
-                const lim = 3;
+                const lim = Number(process.env.REACT_APP_LIMITE_COL_AZUL);
                 //let lim = (datos[i].pacientes.length < minLim ? datos[i].pacientes.length : minLim);
                 for(let j = 0; j < lim;j++){
                     //j-1 => 2 -> [0, 1, 2] // lim = 4 -> [0, 1, 2, 3]
@@ -262,7 +262,7 @@ function Screen(props){
 
     const [paso, SetPaso] = useState(0);
 
-    const callDelay = 5500;
+    const callDelay = 8000;
 
 
     const esperar =(t)=>{
@@ -393,7 +393,7 @@ function Screen(props){
                         <Col xl={3} className="d-flex align-items-center justify-content-center"><Image src={logoUCEN} className="imagen m-0"/></Col>{/* Logo UCentral */}
                         <Col className="d-flex align-items-center justify-content-center p-3" xl={6}>
                             <Container>
-                                <Row><Col><h1 className="fs-1 fw-bold">{Pantalla.nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
+                                <Row><Col><h1 className="fw-bold" style={{fontSize:"3.5rem"}}>{Pantalla.nombre}</h1></Col></Row>{/* Nombre de sala de espera */}
                                 {/*<Row><Col><h2 className="fs-5">{fecha}</h2></Col></Row>{/* Fecha
                                 <Row><Col><h2 className="fs-5">{hora}</h2></Col></Row>{/* Hora */}
                             </Container>
@@ -407,10 +407,10 @@ function Screen(props){
                         <div ref={blueContRef} className={animaC}>
                             <Table bordered className={anima}>
                                 <thead className="fs-4 position-sticky z-3">
-                                    <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick*/}
+                                    <tr>{/* poli = box -> ventanilla // Esp -> tipo at // pass -> tick */}
                                         <th ref={colBox} className="p-0 border border-1 border-white mainTable ColBox">BOX</th>
                                         <th className="p-0 border border-2 border-white mainTable">{"ATENCIÓN"}</th>
-                                        <th className="p-0 border border-2 border-white mainTable" colSpan={Pantalla.poli? 3:6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
+                                        <th className="p-0 border border-2 border-white mainTable" colSpan={Pantalla.poli? Number(process.env.REACT_APP_LIMITE_COL_AZUL):6 }>{Pantalla.poli? "PACIENTES EN ESPERA" : "NÚMEROS"}</th>
                                     </tr>
                                 </thead>
                                 {/*<tbody className="z-3" ref={CallRef}>
