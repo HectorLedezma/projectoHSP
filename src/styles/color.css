@@ -35,6 +35,13 @@
     font-size: 35px;
 }
 
+.loading{
+    background-color: #383838 !important;
+    color: white !important;
+    display: flex;
+    justify-content: center;
+}
+
 .espera{
     background-color: #FFB900 !important;
     font-size: 35px;
@@ -53,6 +60,8 @@
         color: #ffffff;
         font-weight: bolder;
         font-size: 35px;
+        display: flex;
+        align-items: center !important;
     }
     50% {
         background-color: #ffffff; /* Regresa al color inicial */

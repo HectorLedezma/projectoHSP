@@ -8,13 +8,13 @@ function LoadScreen(arg){
     }else{
         estado = -1;
     }
-    return(<div className={"fondo position-absolute top-0"} style={{width:"100%",height:"100vh",zIndex:estado}}>
+    return(<div className={"position-absolute top-0 background-color loading"} style={{width:"100vw",height:"100vh",zIndex:estado}}>
         <Container style={{height:"100vh"}} className="mt-3">
             <Row className="d-flex align-items-center justify-content-center">
                 <Image src={logoHSPC} className="m-3"/> 
             </Row>
-            <Row style={{width:"100vw"}}>
-                <h1 className="d-flex justify-content-center">CARGANDO...</h1>
+            <Row>
+                <h1 className="d-flex justify-content-center"  style={{fontSize:"5.5rem"}}>CARGANDO...</h1>
             </Row>
         </Container>
         {arg.mensaje}
