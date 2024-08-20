@@ -52,7 +52,7 @@ export class ETL{
            //console.log("nombreP V5 = "+NomArray)
            const iniApe = (ape)=>{
                 let ini = "";
-                ape.map(a=>ini=ini+a.charAt(0).toUpperCase());
+                ape.forEach(a=>ini=ini+a.charAt(0).toUpperCase());
                 return ini;
            }
             //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
@@ -387,7 +387,7 @@ export class ETL{
         if(tits.includes("Torre")){
             let torre = Roma(Number(tits[1]));
             tits.splice(1,1,torre);
-            tits.map((t)=>result = result+t+" ")
+            tits.forEach((t)=>result = result+t+" ")
         }else{
             result = tit;
         }
@@ -400,15 +400,15 @@ export class ETL{
     }
 
     CallTickets(datos){
-        let llamas = [];
-        datos.map((d)=>{
-            d.map((p)=>{
+        //let llamas = [];
+        
+        return datos.map((d)=>{
+            d.forEach((p)=>{
                 if(p.Estado === 2){
-                    llamas.push(p);
+                    return p//llamas.push(p);
                 }
             })
         })
-        return llamas;
     }
 
     capitalizeName(str) {
@@ -417,7 +417,7 @@ export class ETL{
         let strList = str.split(" ");
         //console.log("lista: ")
         //console.log(strList)
-        strList.map((s)=>{
+        strList.forEach((s)=>{
             if (typeof s !== 'string' || s.length === 0) {
                 return '';
             }
