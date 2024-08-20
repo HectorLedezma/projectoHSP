@@ -12,6 +12,10 @@ const MainMenu = () =>{
     const navi = useNavigate();
     const etl = new ETL();
 
+    const redirectToExternalSite = (url) => {
+        window.location.href = url;
+    };
+
     const screens = () =>{
         let list = [];
         pantallas.map((p)=>
@@ -20,7 +24,12 @@ const MainMenu = () =>{
                     <td className="border border-dark">{etl.titulo(p.pantalla.nombre)+(p.pantalla.policlinico?" (Policlínico)":"")}</td>
                     <td className="border border-dark">{<Button onClick={ev=>{
                         ev.preventDefault();
-                        navi("/piso/"+p.pantalla.idDepartment);
+                        if(p.pantalla.policlinico){
+                            navi("/piso/"+p.pantalla.idDepartment);
+                        }else{
+                            redirectToExternalSite(process.env.REACT_APP_NO_POLICLINICO)
+                        }
+                        
                     }}>Ir</Button>}</td>
                 </tr>
             )
