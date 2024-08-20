@@ -262,7 +262,7 @@ function Screen(props){
 
     const [paso, SetPaso] = useState(0);
 
-    const callDelay = 8000;
+    const callDelay = Number(process.env.REACT_APP_CALL_DELAY)*1000;
 
 
     const esperar =(t)=>{
@@ -425,10 +425,10 @@ function Screen(props){
                         
 
                         <div className="fixed-bottom z-4 fondo">
-                            <Row className="m-1">
-                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
-                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
-                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
+                            <Row className="info m-0 p-0">
+                                <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
+                                <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
+                                <Col className="d-flex align-items-center justify-content-center fs-2 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                             </Row>
                             
                             <div className="bg-warning fw-bold fs-3" style={{width:"100vw"}}>

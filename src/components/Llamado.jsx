@@ -30,11 +30,15 @@ function Llamado(args) {
      
      onAnimationStart={ev=>{
         ev.preventDefault();
-        playSoundInLoop();
+        console.log("inicio")
+        sound.play();
     }}
     onAnimationEnd={ev => {
         ev.preventDefault();
-        stopSound(); // Detiene el sonido cuando la animación termina
+        console.log("fin")
+        sound.stop();
+        sound.currentTime = 0; // Reinicia el sonido al inicio
+        sound.play();
     }} 
 
     isOpen={modal} {...args}

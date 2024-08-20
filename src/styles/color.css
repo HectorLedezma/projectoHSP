@@ -48,6 +48,11 @@
 
 }
 
+.info{
+    background-color: blanchedalmond !important;
+    color: #000000;
+}
+
 .atendiendo{
     background-color:#0077a7 !important;
     color: #ffffff !important;
