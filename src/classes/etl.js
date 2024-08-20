@@ -35,39 +35,50 @@ export class ETL{
        //console.log("nombreP = "+nombre)
         let newNombre = "P";
         if(nombre !== null && nombre !== ""){
-            // "404 , P"
-            let NomArray0 = nombre.split(",");
-            // ["404" , "P"]
-            //identificar apellidos compuestos
-            let NomArray = ["","",""]
-            try {
-                let apellidos = NomArray0[0].split(" ");
-                apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
-                //separar nombres
-                let nombres = NomArray0[1].split(" ");
-            //console.log("nombreP V2 = "+nombres)
-                nombres = nombres.filter(n => n !== "");
-            //console.log("nombreP V3 = "+nombres)
-                let NomArray = nombre.split(" ");
-            //console.log("nombreP V4 = "+NomArray)
-                NomArray = NomArray.filter(n => (n !== "" && n !== ","));
-            //console.log("nombreP V5 = "+NomArray)
             const iniApe = (ape)=>{
-                    let ini = "";
-                    ape.forEach(a=>ini=ini+a.charAt(0).toUpperCase());
-                    return ini;
-                }
-                //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
+                let ini = "";
+                ape.forEach(a=>ini=ini+a.charAt(0).toUpperCase());
+                return ini;
+            }
+            //"Marcela Gozo, Alma a"
+            let NomArray0 = nombre.split(",");//["nombre"]
+            //["Marcela Gozo", "Alma a"]
+            let nombres = []
+            let NomArray = ["Apellido1","Apellido2","Nombre1","Nombre2"]
+            try {
+                //identificar apellidos compuestos
+                let apellidos = NomArray0[0].split(" ");
+
+                apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
+
+
+                //separar nombres
+                // "ogro shrek"
+                nombres = NomArray0[1].split(" ");
+                // ["ogro", "shrek"]
+                nombres = nombres.filter(n => n !== "");
+                
+                
+                
+                
                 
                 newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? 
                     this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),7):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
             } catch (error) {
-               //console.log("ecepcion")
-                newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
-
+                //console.log("Error : "+error)
+                NomArray = nombre.split(" ");
+                NomArray = NomArray.filter(n => (n !== "" && n !== ","));
+                try {
+                    newNombre = NomArray[2].charAt(0)+NomArray[2].substring(1).toLowerCase();
+                } catch (error) {
+                    //console.log("Sub-Error : "+error)
+                    //console.log(NomArray)
+                    newNombre = this.capitalizeName(NomArray[0])+" "+NomArray[1].charAt(0).toUpperCase();
+                }
+                //["Marcela", "Gozo,", "Alma", "a"]
+                
             }
         }
-        
         
         return newNombre;        
     }
@@ -415,16 +426,21 @@ export class ETL{
 
     capitalizeName(str) {
         let result = "";
+        try {
+            let strList = str.split(" ");
+            //console.log("lista: ")
+            //console.log(strList)
+            strList.forEach((s)=>{
+                if (typeof s !== 'string' || s.length === 0) {
+                    return '';
+                }
+                result = result + s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()+" ";
+            });
+        } catch (error) {
+            result = ""
+        }
         //console.log(str)
-        let strList = str.split(" ");
-        //console.log("lista: ")
-        //console.log(strList)
-        strList.forEach((s)=>{
-            if (typeof s !== 'string' || s.length === 0) {
-                return '';
-            }
-            result = result + s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()+" ";
-        });
+        
         //console.log("Result: "+result);
         return result;
         
