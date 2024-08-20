@@ -1,5 +1,5 @@
 .mainTable{
-    background-color: #0077a7 !important;
+    background-color: #004eb9 !important;
     color: #ffffff !important;
     font-size: 35px !important;
     padding: 0px;
@@ -42,7 +42,8 @@
 }
 
 .atendiendo{
-    background-color: #00C1CD !important;
+    background-color:#0077a7 !important;
+    color: #ffffff !important;
     font-size: 35px;
 }
 

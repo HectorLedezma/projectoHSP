@@ -424,11 +424,11 @@ function Screen(props){
                         </div>
                         
 
-                        <div className="fixed-bottom z-4 fondo col-8">
+                        <div className="fixed-bottom z-4 fondo">
                             <Row className="m-1">
-                                <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
-                                <Col className="d-flex align-items-center justify-content-center fs-5 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
-                                <Col className="d-flex align-items-center justify-content-center fs-4 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
+                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark espera" style={tables.Info_box}/> Paciente en espera</Col>
+                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark llamando" style={tables.Info_box}/> Paciente siendo llamado</Col>
+                                <Col className="d-flex align-items-center justify-content-center fs-3 fw-bold "><div className="m-1 border border-dark atendiendo" style={tables.Info_box}/> Paciente en atención</Col>
                             </Row>
                             
                             <div className="bg-warning fw-bold fs-3" style={{width:"100vw"}}>
@@ -445,7 +445,7 @@ function Screen(props){
                             <thead>
                                 <tr>
                                     <th className="p-0 fs-2 under-header position-sticky z-4 border border-3 border-white" style={tables.Llamando} colSpan={2}>
-                                        Últimos llamados
+                                        ÚLTIMOS LLAMADOS
                                     </th>
                                 </tr>
                                 {<tr>
