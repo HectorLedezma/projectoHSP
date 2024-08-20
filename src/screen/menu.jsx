@@ -27,7 +27,7 @@ const MainMenu = () =>{
                         if(p.pantalla.policlinico){
                             navi("/piso/"+p.pantalla.idDepartment);
                         }else{
-                            redirectToExternalSite(process.env.REACT_APP_NO_POLICLINICO)
+                            redirectToExternalSite(process.env.REACT_APP_NO_POLICLINICO);
                         }
                         
                     }}>Ir</Button>}</td>
