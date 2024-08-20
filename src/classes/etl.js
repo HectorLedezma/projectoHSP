@@ -39,24 +39,26 @@ export class ETL{
             let NomArray0 = nombre.split(",");
             // ["404" , "P"]
             //identificar apellidos compuestos
-            let apellidos = NomArray0[0].split(" ");
-            apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
-            //separar nombres
-            let nombres = NomArray0[1].split(" ");
-           //console.log("nombreP V2 = "+nombres)
-            nombres = nombres.filter(n => n !== "");
-           //console.log("nombreP V3 = "+nombres)
-            let NomArray = nombre.split(" ");
-           //console.log("nombreP V4 = "+NomArray)
-            NomArray = NomArray.filter(n => (n !== "" && n !== ","));
-           //console.log("nombreP V5 = "+NomArray)
-           const iniApe = (ape)=>{
-                let ini = "";
-                ape.forEach(a=>ini=ini+a.charAt(0).toUpperCase());
-                return ini;
-           }
-            //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
+            let NomArray = ["","",""]
             try {
+                let apellidos = NomArray0[0].split(" ");
+                apellidos = apellidos.filter(n => (n !== "" && n !== "DE") && (n !== "LA" && n !== "DEL") && (n !== "LOS"));
+                //separar nombres
+                let nombres = NomArray0[1].split(" ");
+            //console.log("nombreP V2 = "+nombres)
+                nombres = nombres.filter(n => n !== "");
+            //console.log("nombreP V3 = "+nombres)
+                let NomArray = nombre.split(" ");
+            //console.log("nombreP V4 = "+NomArray)
+                NomArray = NomArray.filter(n => (n !== "" && n !== ","));
+            //console.log("nombreP V5 = "+NomArray)
+            const iniApe = (ape)=>{
+                    let ini = "";
+                    ape.forEach(a=>ini=ini+a.charAt(0).toUpperCase());
+                    return ini;
+                }
+                //apellidos[0].charAt(0).toUpperCase()+apellidos[1].charAt(0).toUpperCase()+
+                
                 newNombre = ((nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase()).length >= 8? 
                     this.abreviar(nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase(),7):nombres[0].charAt(0).toUpperCase()+nombres[0].substring(1).toLowerCase())+" "+iniApe(apellidos);
             } catch (error) {
