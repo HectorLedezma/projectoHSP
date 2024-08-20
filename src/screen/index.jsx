@@ -262,7 +262,7 @@ function Screen(props){
 
     const [paso, SetPaso] = useState(0);
 
-    const callDelay = 3500;
+    const callDelay = 5500;
 
 
     const esperar =(t)=>{
